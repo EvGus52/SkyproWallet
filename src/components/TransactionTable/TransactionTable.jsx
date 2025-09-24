@@ -82,6 +82,7 @@ const mockTransactions = [
     description: "Лукойл",
     amount: 1000,
   },
+  
   {
     id: 10,
     date: "29.06.2024",

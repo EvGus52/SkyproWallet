@@ -5,8 +5,7 @@ export const FormWrapper = styled.div`
   background-color: ${THEME.colors.white};
   border-radius: ${THEME.borderRadius.large};
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  padding: 32px;
-  height: 618px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
 `;
@@ -23,7 +22,7 @@ export const FormTitle = styled.h2`
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 12px;
   flex: 1;
 `;
 
@@ -43,7 +42,7 @@ export const Label = styled.label`
 export const Input = styled.input`
   font-family: ${THEME.fonts.family};
   font-size: ${THEME.fonts.sizes.base};
-  padding: 16px;
+  padding: 12px;
   border: 1px solid ${THEME.colors.gray[300]};
   border-radius: ${THEME.borderRadius.small};
   background-color: ${THEME.colors.white};
@@ -66,35 +65,36 @@ export const Input = styled.input`
   }
 `;
 
-export const CategoriesGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+export const CategoriesContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-top: 12px;
+  width: 313px;
 `;
 
 export const CategoryButton = styled.button`
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 16px;
+  padding: 12px 24px;
   border: 1px solid #e5e7eb;
   border-radius: ${THEME.borderRadius.large};
   background-color: ${(props) =>
-    props.$selected ? THEME.colors.primary : THEME.colors.background};
+    props.$selected ? "#F1EBFD" : THEME.colors.background};
   color: ${(props) =>
-    props.$selected ? THEME.colors.white : THEME.colors.black};
+    props.$selected ? THEME.colors.primary : THEME.colors.black};
   font-family: ${THEME.fonts.family};
   font-size: ${THEME.fonts.sizes.xs};
   font-weight: ${THEME.fonts.weights.normal};
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
-  width: 100%;
+  flex-shrink: 0;
 
   &:hover {
     background-color: ${(props) =>
-      props.$selected ? THEME.colors.primary : THEME.colors.gray[200]};
+      props.$selected ? "#F1EBFD" : THEME.colors.gray[200]};
     border-color: ${(props) =>
       props.$selected ? THEME.colors.primary : THEME.colors.gray[300]};
   }
@@ -108,6 +108,11 @@ export const CategoryButton = styled.button`
 export const CategoryIcon = styled.img`
   width: 16px;
   height: 16px;
+  filter: ${(props) =>
+    props.$selected
+      ? "brightness(0) saturate(100%) invert(25%) sepia(95%) saturate(7500%) hue-rotate(266deg) brightness(95%) contrast(101%)"
+      : "none"};
+  transition: filter 0.2s ease;
 `;
 
 export const PrimaryButton = styled.button`

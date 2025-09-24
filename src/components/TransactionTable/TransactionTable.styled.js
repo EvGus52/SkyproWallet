@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { THEME } from "../../constants/theme";
 
 export const TableWrapper = styled.div`
-  background-color: #ffffff;
+  background-color: ${THEME.colors.white};
   border-radius: ${THEME.borderRadius.large};
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   height: 618px;
@@ -11,19 +11,19 @@ export const TableWrapper = styled.div`
 `;
 
 export const TableTitle = styled.h2`
-  font-family: "Montserrat", sans-serif;
-  font-weight: 700;
+  font-family: ${THEME.fonts.family};
+  font-weight: ${THEME.fonts.weights.bold};
   font-style: normal;
-  font-size: 24px;
+  font-size: ${THEME.fonts.sizes.xl};
   padding: 24px;
-  color: #1e293b;
+  color: ${THEME.colors.gray[700]};
   opacity: 1;
 `;
 
 export const TableContainer = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
-  border-radius: 8px;
+  border-radius: ${THEME.borderRadius.small};
   flex: 1;
   scrollbar-gutter: stable;
 
@@ -50,11 +50,11 @@ export const TableContainer = styled.div`
 export const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
-  font-family: "Montserrat", sans-serif;
+  font-family: ${THEME.fonts.family};
 `;
 
 export const TableHeader = styled.thead`
-  background-color: #ffffff;
+  background-color: ${THEME.colors.white};
 `;
 
 export const HeaderRow = styled.tr``;
@@ -62,10 +62,10 @@ export const HeaderRow = styled.tr``;
 export const HeaderCell = styled.th`
   padding: 16px 20px;
   text-align: left;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 400;
+  font-family: ${THEME.fonts.family};
+  font-weight: ${THEME.fonts.weights.normal};
   font-style: normal;
-  font-size: 12px;
+  font-size: ${THEME.fonts.sizes.xs};
   color: #999999;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -86,12 +86,12 @@ export const TableBody = styled.tbody``;
 export const TableRow = styled.tr``;
 
 export const TableCell = styled.td`
-  padding: 16px 20px;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 400;
+  padding: 4px 20px;
+  font-family: ${THEME.fonts.family};
+  font-weight: ${THEME.fonts.weights.normal};
   font-style: normal;
-  font-size: 12px;
-  color: #000000;
+  font-size: ${THEME.fonts.sizes.xs};
+  color: ${THEME.colors.black};
 
   &:first-child {
     padding-left: 24px;
@@ -104,12 +104,12 @@ export const TableCell = styled.td`
 `;
 
 export const DateCell = styled(TableCell)`
-  color: #000000;
-  font-weight: 400;
+  color: ${THEME.colors.black};
+  font-weight: ${THEME.fonts.weights.normal};
 `;
 
 export const CategoryCell = styled(TableCell)`
-  font-weight: 400;
+  font-weight: ${THEME.fonts.weights.normal};
 `;
 
 export const DeleteCell = styled(TableCell)`
@@ -127,7 +127,7 @@ export const DeleteButton = styled.button`
   border: none;
   cursor: pointer;
   padding: 4px;
-  border-radius: 4px;
+  border-radius: ${THEME.borderRadius.small};
   transition: opacity 0.2s ease;
 
   &:hover {
@@ -141,9 +141,9 @@ export const DeleteIcon = styled.img`
 `;
 
 export const AmountCell = styled(TableCell)`
-  font-weight: 400;
-  font-size: 12px;
-  color: #000000;
+  font-weight: ${THEME.fonts.weights.normal};
+  font-size: ${THEME.fonts.sizes.xs};
+  color: ${THEME.colors.black};
 `;
 
 export const DescriptionCell = styled(TableCell)`

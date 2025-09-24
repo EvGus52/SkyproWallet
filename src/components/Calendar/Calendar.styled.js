@@ -60,8 +60,9 @@ export const CalendarHeader = styled.div`
 
   h3 {
     font-family: ${THEME.fonts.family};
-    font-size: 18px;
-    font-weight: ${THEME.fonts.weights.semibold};
+    font-weight: ${THEME.fonts.weights.bold};
+    font-style: normal;
+    font-size: ${THEME.fonts.sizes.xl};
     color: ${THEME.colors.gray[700]};
     margin: 0;
   }

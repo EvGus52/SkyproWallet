@@ -6,7 +6,7 @@ import {
   FormGroup,
   Label,
   Input,
-  CategoriesGrid,
+  CategoriesContainer,
   CategoryButton,
   CategoryIcon,
   PrimaryButton,
@@ -139,7 +139,7 @@ const ExpenseForm = ({ onSubmit, onCancel }) => {
 
         <FormGroup>
           <Label>Категория</Label>
-          <CategoriesGrid>
+          <CategoriesContainer>
             {categories.map((category) => (
               <CategoryButton
                 key={category.name}
@@ -147,11 +147,15 @@ const ExpenseForm = ({ onSubmit, onCancel }) => {
                 $selected={formData.category === category.name}
                 onClick={() => handleCategorySelect(category.name)}
               >
-                <CategoryIcon src={category.icon} alt={category.name} />
+                <CategoryIcon
+                  src={category.icon}
+                  alt={category.name}
+                  $selected={formData.category === category.name}
+                />
                 {category.name}
               </CategoryButton>
             ))}
-          </CategoriesGrid>
+          </CategoriesContainer>
         </FormGroup>
 
         <FormGroup>
