@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import Header from "../../components/Header";
+import GlobalStyles from "../../GlobalStyles";
 import {
   LoginContainer,
   LoginCard,
   LoginTitle,
   LoginForm,
   FormGroup,
-  Label,
   Input,
   LoginButton,
   RegisterLink,
@@ -33,44 +34,46 @@ const Login = () => {
   };
 
   return (
-    <LoginContainer>
-      <LoginCard>
-        <LoginTitle>Вход в Skypro.Wallet</LoginTitle>
-        <LoginForm onSubmit={handleSubmit}>
-          <FormGroup>
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="example@mail.com"
-              required
-            />
-          </FormGroup>
+    <>
+      <GlobalStyles />
+      <LoginContainer>
+        <Header />
 
-          <FormGroup>
-            <Label htmlFor="password">Пароль</Label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Введите пароль"
-              required
-            />
-          </FormGroup>
+        <LoginCard>
+          <LoginTitle>Вход</LoginTitle>
+          <LoginForm onSubmit={handleSubmit}>
+            <FormGroup>
+              <Input
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Эл. почта"
+                required
+              />
+            </FormGroup>
 
-          <LoginButton type="submit">Войти</LoginButton>
-        </LoginForm>
+            <FormGroup>
+              <Input
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Пароль"
+                required
+              />
+            </FormGroup>
 
-        <RegisterLink>
-          Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
-        </RegisterLink>
-      </LoginCard>
-    </LoginContainer>
+            <LoginButton type="submit">Войти</LoginButton>
+          </LoginForm>
+
+          <RegisterLink>
+            <p>Нужно зарегистрироваться?</p>
+            <Link to="/register">Регистрируйтесь здесь</Link>
+          </RegisterLink>
+        </LoginCard>
+      </LoginContainer>
+    </>
   );
 };
 

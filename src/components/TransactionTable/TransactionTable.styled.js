@@ -1,27 +1,50 @@
 import styled from "styled-components";
+import { THEME } from "../../constants/theme";
 
 export const TableWrapper = styled.div`
   background-color: #ffffff;
-  border-radius: 12px;
+  border-radius: ${THEME.borderRadius.large};
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  padding: 32px;
+  height: 618px;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const TableTitle = styled.h2`
-  width: 282px;
-  height: 29px;
   font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-style: normal;
   font-size: 24px;
-  font-weight: 600;
+  padding: 24px;
   color: #1e293b;
-  margin: 0 0 24px 0;
   opacity: 1;
 `;
 
 export const TableContainer = styled.div`
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   border-radius: 8px;
-  border: 1px solid #f1f5f9;
+  flex: 1;
+  scrollbar-gutter: stable;
+
+  /* Стили для скроллбара */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #d9d9d9;
+    border-radius: ${THEME.borderRadius.large};
+    opacity: 1;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #d9d9d9;
+  }
 `;
 
 export const Table = styled.table`
@@ -39,9 +62,11 @@ export const HeaderRow = styled.tr``;
 export const HeaderCell = styled.th`
   padding: 16px 20px;
   text-align: left;
-  font-weight: 600;
-  font-size: 14px;
-  color: #64748b;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 12px;
+  color: #999999;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border-bottom: 1px solid #e2e8f0;
@@ -58,17 +83,15 @@ export const HeaderCell = styled.th`
 
 export const TableBody = styled.tbody``;
 
-export const TableRow = styled.tr`
-  &:not(:last-child) {
-    border-bottom: 1px solid #f1f5f9;
-  }
-`;
+export const TableRow = styled.tr``;
 
 export const TableCell = styled.td`
   padding: 16px 20px;
-  font-size: 14px;
-  color: #334155;
-  vertical-align: middle;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 12px;
+  color: #000000;
 
   &:first-child {
     padding-left: 24px;
@@ -81,12 +104,12 @@ export const TableCell = styled.td`
 `;
 
 export const DateCell = styled(TableCell)`
-  color: #64748b;
-  font-weight: 500;
+  color: #000000;
+  font-weight: 400;
 `;
 
 export const CategoryCell = styled(TableCell)`
-  font-weight: 500;
+  font-weight: 400;
 `;
 
 export const DeleteCell = styled(TableCell)`
@@ -118,9 +141,9 @@ export const DeleteIcon = styled.img`
 `;
 
 export const AmountCell = styled(TableCell)`
-  font-weight: 600;
-  font-size: 16px;
-  color: #334155;
+  font-weight: 400;
+  font-size: 12px;
+  color: #000000;
 `;
 
 export const DescriptionCell = styled(TableCell)`

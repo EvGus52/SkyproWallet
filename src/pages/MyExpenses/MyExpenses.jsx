@@ -17,7 +17,7 @@ const MyExpenses = () => {
           style={{
             marginBottom: "24px",
             fontSize: "32px",
-            fontWeight: "600",
+            fontWeight: "700",
             color: "#1e293b",
           }}
         >

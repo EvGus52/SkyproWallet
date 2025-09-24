@@ -1,16 +1,17 @@
 import styled from "styled-components";
+import { THEME } from "../../constants/theme";
 
 export const LogoutContainer = styled.div`
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f4f5f6;
+  background-color: ${THEME.colors.background};
 `;
 
 export const LogoutCard = styled.div`
-  background-color: #ffffff;
-  border-radius: 12px;
+  background-color: ${THEME.colors.white};
+  border-radius: ${THEME.borderRadius.medium};
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   padding: 48px;
   width: 100%;
@@ -24,16 +25,16 @@ export const LogoutIcon = styled.div`
 `;
 
 export const LogoutTitle = styled.h1`
-  font-family: "Montserrat", sans-serif;
-  font-size: 24px;
-  font-weight: 600;
-  color: #1e293b;
+  font-family: ${THEME.fonts.family};
+  font-size: ${THEME.fonts.sizes.xl};
+  font-weight: ${THEME.fonts.weights.semibold};
+  color: ${THEME.colors.gray[700]};
   margin-bottom: 16px;
 `;
 
 export const LogoutMessage = styled.p`
-  font-family: "Montserrat", sans-serif;
-  font-size: 16px;
+  font-family: ${THEME.fonts.family};
+  font-size: ${THEME.fonts.sizes.base};
   color: #64748b;
   margin-bottom: 32px;
   line-height: 1.5;
@@ -46,14 +47,14 @@ export const ButtonGroup = styled.div`
 `;
 
 export const ConfirmButton = styled.button`
-  font-family: "Montserrat", sans-serif;
-  font-size: 16px;
-  font-weight: 600;
+  font-family: ${THEME.fonts.family};
+  font-size: ${THEME.fonts.sizes.base};
+  font-weight: ${THEME.fonts.weights.semibold};
   padding: 12px 24px;
   border: none;
-  border-radius: 8px;
+  border-radius: ${THEME.borderRadius.small};
   background-color: #ef4444;
-  color: #ffffff;
+  color: ${THEME.colors.white};
   cursor: pointer;
   transition: background-color 0.2s ease;
 
@@ -68,14 +69,14 @@ export const ConfirmButton = styled.button`
 `;
 
 export const CancelButton = styled.button`
-  font-family: "Montserrat", sans-serif;
-  font-size: 16px;
-  font-weight: 600;
+  font-family: ${THEME.fonts.family};
+  font-size: ${THEME.fonts.sizes.base};
+  font-weight: ${THEME.fonts.weights.semibold};
   padding: 12px 24px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  background-color: #ffffff;
-  color: #374151;
+  border: 1px solid ${THEME.colors.gray[300]};
+  border-radius: ${THEME.borderRadius.small};
+  background-color: ${THEME.colors.white};
+  color: ${THEME.colors.gray[600]};
   cursor: pointer;
   transition: all 0.2s ease;
 

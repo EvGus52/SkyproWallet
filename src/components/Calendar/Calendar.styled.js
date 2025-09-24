@@ -1,8 +1,9 @@
 import styled from "styled-components";
+import { THEME } from "../../constants/theme";
 
 export const CalendarContainer = styled.div`
-  background: #ffffff;
-  border-radius: 12px;
+  background: ${THEME.colors.white};
+  border-radius: ${THEME.borderRadius.large};
   padding: 0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 24px;
@@ -39,7 +40,7 @@ export const CalendarContainer = styled.div`
 export const PeriodBlock = styled.div`
   width: 100%;
   height: 113px;
-  background: #ffffff;
+  background: ${THEME.colors.white};
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -58,10 +59,10 @@ export const CalendarHeader = styled.div`
   opacity: 1;
 
   h3 {
-    font-family: "Montserrat", sans-serif;
+    font-family: ${THEME.fonts.family};
     font-size: 18px;
-    font-weight: 600;
-    color: #1e293b;
+    font-weight: ${THEME.fonts.weights.semibold};
+    color: ${THEME.colors.gray[700]};
     margin: 0;
   }
 `;
@@ -73,7 +74,7 @@ export const WeekDaysBlock = styled.div`
   grid-template-columns: repeat(7, 1fr);
   gap: 8px;
   padding: 16px 32px;
-  background: #ffffff;
+  background: ${THEME.colors.white};
 `;
 
 export const WeekDay = styled.div`
@@ -83,9 +84,9 @@ export const WeekDay = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  font-family: "Montserrat", sans-serif;
-  font-size: 12px;
-  font-weight: 400;
+  font-family: ${THEME.fonts.family};
+  font-size: ${THEME.fonts.sizes.xs};
+  font-weight: ${THEME.fonts.weights.normal};
   color: rgba(153, 153, 153, 1);
   text-align: center;
   line-height: 100%;
@@ -102,7 +103,7 @@ export const MonthSection = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: #ffffff;
+  background: ${THEME.colors.white};
   overflow-y: auto;
   padding: 16px;
 
@@ -113,13 +114,13 @@ export const MonthSection = styled.div`
   }
 
   .month-header {
-    font-family: "Montserrat", sans-serif;
-    font-weight: 600;
+    font-family: ${THEME.fonts.family};
+    font-weight: ${THEME.fonts.weights.semibold};
     font-style: normal;
-    font-size: 16px;
+    font-size: ${THEME.fonts.sizes.base};
     line-height: 100%;
     letter-spacing: 0px;
-    color: #1e293b;
+    color: ${THEME.colors.gray[700]};
     margin-bottom: 16px;
     text-align: left;
   }
@@ -153,17 +154,16 @@ export const CalendarDay = styled.div`
   opacity: 1;
 
   span {
-    font-family: "Montserrat", sans-serif;
-    font-size: 12px;
-    font-weight: 400;
+    font-family: ${THEME.fonts.family};
+    font-size: ${THEME.fonts.sizes.xs};
+    font-weight: ${THEME.fonts.weights.normal};
     font-style: normal;
     line-height: 100%;
     letter-spacing: 0%;
     text-align: center;
-    vertical-align: middle;
     color: ${(props) => {
-      if (props.$isSelected) return "#7334EA";
-      return "#1e293b";
+      if (props.$isSelected) return THEME.colors.primary;
+      return THEME.colors.gray[700];
     }};
   }
 

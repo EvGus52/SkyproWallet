@@ -119,12 +119,6 @@ const ExpenseForm = ({ onSubmit, onCancel }) => {
     return `${day}.${month}.${year}`;
   };
 
-  // Получение текущей даты для input[type="date"]
-  const getCurrentDate = () => {
-    const today = new Date();
-    return today.toISOString().split("T")[0];
-  };
-
   return (
     <FormWrapper>
       <FormTitle>Новый расход</FormTitle>
@@ -137,7 +131,7 @@ const ExpenseForm = ({ onSubmit, onCancel }) => {
             type="text"
             value={formData.description}
             onChange={handleChange}
-            placeholder="Пятерочка"
+            placeholder="Введите описание"
             className={isFieldValid("description") ? "valid" : ""}
             required
           />
@@ -165,10 +159,10 @@ const ExpenseForm = ({ onSubmit, onCancel }) => {
           <Input
             id="date"
             name="date"
-            type="date"
+            type="text"
             value={formData.date}
             onChange={handleChange}
-            max={getCurrentDate()}
+            placeholder="Введите дату"
             className={isFieldValid("date") ? "valid" : ""}
             required
           />
@@ -182,7 +176,7 @@ const ExpenseForm = ({ onSubmit, onCancel }) => {
             type="number"
             value={formData.amount}
             onChange={handleChange}
-            placeholder="3 500"
+            placeholder="Введите сумму"
             min="0.01"
             step="0.01"
             className={isFieldValid("amount") ? "valid" : ""}
