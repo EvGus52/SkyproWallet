@@ -1,7 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import Header from "../../components/Header";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import Header from "../../components/Header/Header";
 import GlobalStyles from "../../GlobalStyles";
+import { signIn } from "../../services/Auth";
+import { setToken, setUserData } from "../../utils/tokenUtils";
 import {
   LoginContainer,
   LoginCard,
@@ -14,23 +17,36 @@ import {
 } from "./Login.styled";
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    defaultValues: {
+      login: "",
+      password: "",
+    },
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const onSubmit = async (data) => {
+    setError("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Вход в систему:", formData);
-    // Здесь будет логика аутентификации
+    try {
+      const result = await signIn(data);
+
+      // Сохраняем токен и данные пользователя
+      setToken(result.user.token);
+      setUserData(result.user);
+
+      // Перенаправляем на главную страницу
+      navigate("/");
+    } catch (err) {
+      setError(err.message);
+      console.error("Ошибка входа:", err);
+    }
   };
 
   return (
@@ -41,30 +57,60 @@ const Login = () => {
 
         <LoginCard>
           <LoginTitle>Вход</LoginTitle>
-          <LoginForm onSubmit={handleSubmit}>
+          {error && (
+            <div
+              style={{
+                color: "red",
+                marginBottom: "16px",
+                textAlign: "center",
+                fontSize: "14px",
+              }}
+            >
+              {error}
+            </div>
+          )}
+          <LoginForm onSubmit={handleSubmit(onSubmit)}>
             <FormGroup>
               <Input
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Эл. почта"
-                required
+                {...register("login", {
+                  required: "Логин обязателен",
+                  minLength: {
+                    value: 3,
+                    message: "Логин должен содержать минимум 3 символа",
+                  },
+                })}
+                type="text"
+                placeholder="Логин"
               />
+              {errors.login && (
+                <span style={{ color: "red", fontSize: "12px" }}>
+                  {errors.login.message}
+                </span>
+              )}
             </FormGroup>
 
             <FormGroup>
               <Input
-                name="password"
+                {...register("password", {
+                  required: "Пароль обязателен",
+                  minLength: {
+                    value: 6,
+                    message: "Пароль должен содержать минимум 6 символов",
+                  },
+                })}
                 type="password"
-                value={formData.password}
-                onChange={handleChange}
                 placeholder="Пароль"
-                required
               />
+              {errors.password && (
+                <span style={{ color: "red", fontSize: "12px" }}>
+                  {errors.password.message}
+                </span>
+              )}
             </FormGroup>
 
-            <LoginButton type="submit">Войти</LoginButton>
+            <LoginButton type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Вход..." : "Войти"}
+            </LoginButton>
           </LoginForm>
 
           <RegisterLink>

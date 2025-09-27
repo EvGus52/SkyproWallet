@@ -11,11 +11,8 @@ import {
   CalendarDay,
 } from "./Calendar.styled";
 
-const Calendar = ({ selectedDate, onDateSelect, expenses = [] }) => {
-  const today = new Date();
-  const [currentYear, setCurrentYear] = useState(2024);
-  const [currentMonth, setCurrentMonth] = useState(6); // Июль (0-11)
-  const [displayedMonths, setDisplayedMonths] = useState([6, 7, 8, 9, 10, 11]); // Июль - Декабрь 2024
+const Calendar = ({ selectedDate, onDateSelect }) => {
+  const [displayedMonths] = useState([6, 7, 8, 9, 10, 11]); // Июль - Декабрь 2024
 
   const getDaysInMonth = (date) => {
     const year = date.getFullYear();
@@ -79,7 +76,6 @@ const Calendar = ({ selectedDate, onDateSelect, expenses = [] }) => {
   const weekDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
 
   // Показываем только текущий месяц
-  const currentDate = new Date(currentYear, currentMonth);
 
   return (
     <CalendarContainer>
