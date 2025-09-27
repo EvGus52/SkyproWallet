@@ -26,3 +26,26 @@ export const AnalyticsContent = styled.div`
     height: auto;
   }
 `;
+
+export const AnalyticsGrid = styled.div`
+  display: grid;
+  grid-template-columns: 379px 1fr;
+  gap: 32px;
+  align-items: start;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+`;
+
+export const FilterSection = styled.div`
+  display: flex;
+  justify-content: flex-start;
+`;
+
+export const ChartSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+`;

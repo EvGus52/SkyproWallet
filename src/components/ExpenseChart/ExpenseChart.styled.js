@@ -2,13 +2,15 @@ import styled from "styled-components";
 
 export const ChartWrapper = styled.div`
   background: #ffffff;
-  border-radius: 30px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 16px 16px 24px 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   margin-bottom: 24px;
-  width: 789px;
+  width: 100%;
+  max-width: 789px;
   height: 540px;
   position: relative;
   opacity: 1;
+  border: 1px solid #e2e8f0;
 `;
 
 export const ChartTitle = styled.h3`
@@ -20,37 +22,39 @@ export const ChartTitle = styled.h3`
 `;
 
 export const HeaderBlock = styled.div`
-  width: 725px;
+  width: calc(100% - 64px);
   height: 56px;
   position: absolute;
   top: 32px;
   left: 32px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 8px;
   opacity: 1;
 `;
 
 export const TotalSum = styled.div`
   font-family: "Montserrat", sans-serif;
-  font-size: 24px;
+  font-size: 32px;
   font-weight: 700;
   color: #1e293b;
+  margin: 0;
 `;
 
 export const DateText = styled.div`
   font-family: "Montserrat", sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: #64748b;
+  margin: 0;
 `;
 
 export const ChartArea = styled.div`
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
   gap: 32px;
-  width: 725px;
+  width: calc(100% - 64px);
   height: 387px;
   position: absolute;
   top: 109px;
@@ -131,4 +135,37 @@ export const NoDataMessage = styled.div`
   background: #f8fafc;
   border-radius: 8px;
   border: 2px dashed #cbd5e1;
+`;
+
+export const ChartContainer = styled.div`
+  margin-bottom: 24px;
+`;
+
+export const ChartTypeSelector = styled.div`
+  display: flex;
+  gap: 8px;
+  margin: 16px 0;
+  justify-content: center;
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+`;
+
+export const SelectorButton = styled.button`
+  padding: 6px 12px;
+  border: 1px solid ${(props) => (props.$active ? "#7334EA" : "#e2e8f0")};
+  background: ${(props) => (props.$active ? "#F1EBFD" : "white")};
+  color: ${(props) => (props.$active ? "#7334EA" : "#64748b")};
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #7334ea;
+    background: ${(props) => (props.$active ? "#E9D5FF" : "#f8fafc")};
+  }
 `;

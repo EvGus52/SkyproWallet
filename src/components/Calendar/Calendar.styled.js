@@ -162,6 +162,8 @@ export const CalendarDay = styled.div`
     text-align: center;
     vertical-align: middle;
     color: ${(props) => {
+      if (props.$isRangeStart || props.$isRangeEnd) return "#7334EA";
+      if (props.$isInRange) return "#7334EA";
       if (props.$isSelected) return "#7334EA";
       return "#1e293b";
     }};
@@ -177,17 +179,22 @@ export const CalendarDay = styled.div`
   }
 
   background-color: ${(props) => {
+    if (props.$isRangeStart || props.$isRangeEnd) return "#F1EBFD";
+    if (props.$isInRange) return "#F1EBFD";
     if (props.$isSelected) return "#F1EBFD";
     return "transparent";
   }};
 
   border: ${(props) => {
+    if (props.$isRangeStart || props.$isRangeEnd) return "none";
     if (props.$isSelected) return "none";
     return "1px solid transparent";
   }};
 
   &:hover {
     background-color: ${(props) => {
+      if (props.$isRangeStart || props.$isRangeEnd) return "#E9D5FF";
+      if (props.$isInRange) return "#E9D5FF";
       if (props.$isSelected) return "#F1EBFD";
       return "#f1f5f9";
     }};
