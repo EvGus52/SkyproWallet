@@ -1,110 +1,150 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import Header from "../../components/Header/Header";
+import GlobalStyles from "../../GlobalStyles";
+import { signUp } from "../../services/Auth";
+import { setToken, setUserData } from "../../utils/tokenUtils";
 import {
   RegisterContainer,
   RegisterCard,
   RegisterTitle,
   RegisterForm,
   FormGroup,
-  Label,
   Input,
   RegisterButton,
   LoginLink,
 } from "./Register.styled";
 
 const Register = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    defaultValues: {
+      name: "",
+      login: "",
+      password: "",
+    },
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const onSubmit = async (data) => {
+    setError("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    try {
+      const result = await signUp(data);
 
-    if (formData.password !== formData.confirmPassword) {
-      alert("Пароли не совпадают");
-      return;
+      // Сохраняем токен и данные пользователя
+      setToken(result.user.token);
+      setUserData(result.user);
+
+      // Перенаправляем на главную страницу
+      navigate("/");
+    } catch (err) {
+      setError(err.message);
+      console.error("Ошибка регистрации:", err);
     }
-
-    console.log("Регистрация:", formData);
-    // Здесь будет логика регистрации
   };
 
   return (
-    <RegisterContainer>
-      <RegisterCard>
-        <RegisterTitle>Регистрация в Skypro.Wallet</RegisterTitle>
-        <RegisterForm onSubmit={handleSubmit}>
-          <FormGroup>
-            <Label htmlFor="name">Имя</Label>
-            <Input
-              id="name"
-              name="name"
-              type="text"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Введите ваше имя"
-              required
-            />
-          </FormGroup>
+    <>
+      <GlobalStyles />
+      <RegisterContainer>
+        <Header />
 
-          <FormGroup>
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="example@mail.com"
-              required
-            />
-          </FormGroup>
+        <RegisterCard>
+          <RegisterTitle>Регистрация</RegisterTitle>
+          {error && (
+            <div
+              style={{
+                color: "red",
+                marginBottom: "16px",
+                textAlign: "center",
+                fontSize: "14px",
+              }}
+            >
+              {error}
+            </div>
+          )}
+          <RegisterForm onSubmit={handleSubmit(onSubmit)}>
+            <FormGroup>
+              <Input
+                {...register("name", {
+                  required: "Имя обязательно",
+                  minLength: {
+                    value: 2,
+                    message: "Имя должно содержать минимум 2 символа",
+                  },
+                })}
+                type="text"
+                placeholder="Имя"
+              />
+              {errors.name && (
+                <span style={{ color: "red", fontSize: "12px" }}>
+                  {errors.name.message}
+                </span>
+              )}
+            </FormGroup>
 
-          <FormGroup>
-            <Label htmlFor="password">Пароль</Label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Введите пароль"
-              required
-            />
-          </FormGroup>
+            <FormGroup>
+              <Input
+                {...register("login", {
+                  required: "Логин обязателен",
+                  minLength: {
+                    value: 3,
+                    message: "Логин должен содержать минимум 3 символа",
+                  },
+                  pattern: {
+                    value: /^[a-zA-Z0-9_]+$/,
+                    message:
+                      "Логин может содержать только буквы, цифры и подчеркивания",
+                  },
+                })}
+                type="text"
+                placeholder="Логин"
+              />
+              {errors.login && (
+                <span style={{ color: "red", fontSize: "12px" }}>
+                  {errors.login.message}
+                </span>
+              )}
+            </FormGroup>
 
-          <FormGroup>
-            <Label htmlFor="confirmPassword">Подтвердите пароль</Label>
-            <Input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="Повторите пароль"
-              required
-            />
-          </FormGroup>
+            <FormGroup>
+              <Input
+                {...register("password", {
+                  required: "Пароль обязателен",
+                  minLength: {
+                    value: 6,
+                    message: "Пароль должен содержать минимум 6 символов",
+                  },
+                })}
+                type="password"
+                placeholder="Пароль"
+              />
+              {errors.password && (
+                <span style={{ color: "red", fontSize: "12px" }}>
+                  {errors.password.message}
+                </span>
+              )}
+            </FormGroup>
 
-          <RegisterButton type="submit">Зарегистрироваться</RegisterButton>
-        </RegisterForm>
+            <RegisterButton type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Регистрация..." : "Зарегистрироваться"}
+            </RegisterButton>
+          </RegisterForm>
 
-        <LoginLink>
-          Уже есть аккаунт? <Link to="/login">Войти</Link>
-        </LoginLink>
-      </RegisterCard>
-    </RegisterContainer>
+          <LoginLink>
+            <p>Уже есть аккаунт?</p>
+            <Link to="/login">Войдите здесь</Link>
+          </LoginLink>
+        </RegisterCard>
+      </RegisterContainer>
+    </>
   );
 };
 

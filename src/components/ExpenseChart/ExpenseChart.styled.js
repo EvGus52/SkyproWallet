@@ -1,9 +1,8 @@
 import styled from "styled-components";
+import { THEME } from "../../constants/theme";
 
 export const ChartWrapper = styled.div`
-  background: #ffffff;
-  border-radius: 16px 16px 24px 24px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
   margin-bottom: 24px;
   width: 100%;
   max-width: 789px;
@@ -14,10 +13,10 @@ export const ChartWrapper = styled.div`
 `;
 
 export const ChartTitle = styled.h3`
-  font-family: "Montserrat", sans-serif;
+  font-family: ${THEME.fonts.family};
   font-size: 18px;
-  font-weight: 600;
-  color: #1e293b;
+  font-weight: ${THEME.fonts.weights.semibold};
+  color: ${THEME.colors.gray[700]};
   margin: 0 0 20px 0;
 `;
 
@@ -34,17 +33,7 @@ export const HeaderBlock = styled.div`
 `;
 
 export const TotalSum = styled.div`
-  font-family: "Montserrat", sans-serif;
-  font-size: 32px;
-  font-weight: 700;
-  color: #1e293b;
-  margin: 0;
-`;
 
-export const DateText = styled.div`
-  font-family: "Montserrat", sans-serif;
-  font-size: 16px;
-  font-weight: 500;
   color: #64748b;
   margin: 0;
 `;
@@ -86,13 +75,13 @@ export const BarColumn = styled.div`
 `;
 
 export const BarValue = styled.div`
-  font-family: "Montserrat", sans-serif;
-  font-size: 16px;
-  font-weight: 600;
+  font-family: ${THEME.fonts.family};
+  font-size: ${THEME.fonts.sizes.base};
+  font-weight: ${THEME.fonts.weights.semibold};
   font-style: normal;
   line-height: 100%;
   letter-spacing: 0px;
-  color: #1e293b;
+  color: ${THEME.colors.gray[700]};
   text-align: center;
   white-space: nowrap;
   position: absolute;
@@ -108,13 +97,13 @@ export const BarValue = styled.div`
 `;
 
 export const BarCategory = styled.div`
-  font-family: "Montserrat", sans-serif;
-  font-size: 12px;
-  font-weight: 400;
+  font-family: ${THEME.fonts.family};
+  font-size: ${THEME.fonts.sizes.xs};
+  font-weight: ${THEME.fonts.weights.normal};
   font-style: normal;
   line-height: 100%;
   letter-spacing: 0px;
-  color: #000000;
+  color: ${THEME.colors.black};
   text-align: center;
   position: absolute;
   bottom: -24px;
@@ -129,11 +118,11 @@ export const BarCategory = styled.div`
 export const NoDataMessage = styled.div`
   text-align: center;
   padding: 40px 20px;
-  font-family: "Montserrat", sans-serif;
-  font-size: 16px;
+  font-family: ${THEME.fonts.family};
+  font-size: ${THEME.fonts.sizes.base};
   color: #64748b;
   background: #f8fafc;
-  border-radius: 8px;
+  border-radius: ${THEME.borderRadius.small};
   border: 2px dashed #cbd5e1;
 `;
 

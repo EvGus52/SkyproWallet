@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { THEME } from "../../constants/theme";
 
 export const AnalyticsContainer = styled.div`
   padding: 24px 0;
@@ -7,10 +8,10 @@ export const AnalyticsContainer = styled.div`
 `;
 
 export const AnalyticsTitle = styled.h1`
-  font-family: "Montserrat", sans-serif;
-  font-size: 32px;
-  font-weight: 600;
-  color: #1e293b;
+  font-family: ${THEME.fonts.family};
+  font-size: ${THEME.fonts.sizes["2xl"]};
+  font-weight: ${THEME.fonts.weights.semibold};
+  color: ${THEME.colors.gray[700]};
   margin-bottom: 32px;
 `;
 

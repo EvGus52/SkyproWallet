@@ -1,24 +1,29 @@
 import styled from "styled-components";
+import { THEME } from "../../constants/theme";
 
 export const FormWrapper = styled.div`
-  background-color: #ffffff;
-  border-radius: 12px;
+  background-color: ${THEME.colors.white};
+  border-radius: ${THEME.borderRadius.large};
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  padding: 32px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const FormTitle = styled.h2`
-  font-family: "Montserrat", sans-serif;
-  font-size: 24px;
-  font-weight: 600;
-  color: #1e293b;
+  font-family: ${THEME.fonts.family};
+  font-weight: ${THEME.fonts.weights.bold};
+  font-style: normal;
+  font-size: ${THEME.fonts.sizes.xl};
+  color: ${THEME.colors.gray[700]};
   margin: 0 0 24px 0;
 `;
 
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 12px;
+  flex: 1;
 `;
 
 export const FormGroup = styled.div`
@@ -27,20 +32,20 @@ export const FormGroup = styled.div`
 `;
 
 export const Label = styled.label`
-  font-family: "Montserrat", sans-serif;
-  font-size: 16px;
-  font-weight: 500;
-  color: #000000;
+  font-family: ${THEME.fonts.family};
+  font-size: ${THEME.fonts.sizes.base};
+  font-weight: ${THEME.fonts.weights.semibold};
+  color: ${THEME.colors.black};
   margin-bottom: 12px;
 `;
 
 export const Input = styled.input`
-  font-family: "Montserrat", sans-serif;
-  font-size: 16px;
-  padding: 16px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  background-color: #ffffff;
+  font-family: ${THEME.fonts.family};
+  font-size: ${THEME.fonts.sizes.base};
+  padding: 12px;
+  border: 1px solid ${THEME.colors.gray[300]};
+  border-radius: ${THEME.borderRadius.small};
+  background-color: ${THEME.colors.white};
   color: #1f2937;
   transition: all 0.2s ease;
 
@@ -48,39 +53,50 @@ export const Input = styled.input`
   &.valid {
     outline: none;
     background-color: #f1ebfd;
-    border: 0.5px solid #7334ea;
+    border: 0.5px solid ${THEME.colors.primary};
   }
 
   &::placeholder {
-    color: #9ca3af;
+    font-family: ${THEME.fonts.family};
+    font-weight: ${THEME.fonts.weights.normal};
+    font-style: normal;
+    font-size: ${THEME.fonts.sizes.xs};
+    color: ${THEME.colors.gray[400]};
   }
 `;
 
-export const CategoriesGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+export const CategoriesContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-top: 12px;
+  width: 313px;
 `;
 
 export const CategoryButton = styled.button`
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 16px;
+  padding: 12px 24px;
   border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  background-color: ${(props) => (props.$selected ? "#7334EA" : "#ffffff")};
-  color: ${(props) => (props.$selected ? "#ffffff" : "#374151")};
-  font-family: "Montserrat", sans-serif;
-  font-size: 14px;
-  font-weight: 500;
+  border-radius: ${THEME.borderRadius.large};
+  background-color: ${(props) =>
+    props.$selected ? "#F1EBFD" : THEME.colors.background};
+  color: ${(props) =>
+    props.$selected ? THEME.colors.primary : THEME.colors.black};
+  font-family: ${THEME.fonts.family};
+  font-size: ${THEME.fonts.sizes.xs};
+  font-weight: ${THEME.fonts.weights.normal};
   cursor: pointer;
   transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
 
   &:hover {
-    background-color: ${(props) => (props.$selected ? "#7334EA" : "#f9fafb")};
-    border-color: ${(props) => (props.$selected ? "#7334EA" : "#d1d5db")};
+    background-color: ${(props) =>
+      props.$selected ? "#F1EBFD" : THEME.colors.gray[200]};
+    border-color: ${(props) =>
+      props.$selected ? THEME.colors.primary : THEME.colors.gray[300]};
   }
 
   &:focus {
@@ -92,24 +108,30 @@ export const CategoryButton = styled.button`
 export const CategoryIcon = styled.img`
   width: 16px;
   height: 16px;
+  filter: ${(props) =>
+    props.$selected
+      ? "brightness(0) saturate(100%) invert(25%) sepia(95%) saturate(7500%) hue-rotate(266deg) brightness(95%) contrast(101%)"
+      : "none"};
+  transition: filter 0.2s ease;
 `;
 
 export const PrimaryButton = styled.button`
   width: 100%;
-  font-family: "Montserrat", sans-serif;
-  font-size: 16px;
-  font-weight: 600;
+  font-family: ${THEME.fonts.family};
+  font-weight: ${THEME.fonts.weights.semibold};
+  font-style: normal;
+  font-size: ${THEME.fonts.sizes.xs};
   padding: 16px;
   border: none;
-  border-radius: 8px;
-  background-color: #7334ea;
-  color: #ffffff;
+  border-radius: ${THEME.borderRadius.small};
+  background-color: ${THEME.colors.primary};
+  color: ${THEME.colors.white};
   cursor: pointer;
   transition: all 0.2s ease;
   margin-top: 8px;
 
   &:hover:not(:disabled) {
-    background-color: #5b21b6;
+    background-color: ${THEME.colors.primaryHover};
   }
 
   &:focus {
