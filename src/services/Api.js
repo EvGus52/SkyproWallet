@@ -30,6 +30,12 @@ export async function validateToken({ token }) {
  */
 export async function fetchTransactions({ token, sortBy, filterBy }) {
   try {
+    console.log("🔍 fetchTransactions вызвана с параметрами:", {
+      token: token ? "есть" : "нет",
+      sortBy,
+      filterBy,
+    });
+
     // Строим query параметры
     const queryParams = new URLSearchParams();
 
@@ -46,13 +52,34 @@ export async function fetchTransactions({ token, sortBy, filterBy }) {
       ? `${API_URL}?${queryParams.toString()}`
       : API_URL;
 
+    console.log("🔍 Отправляем запрос на URL:", url);
+    console.log("🔍 Заголовки:", {
+      Authorization: `Bearer ${token?.substring(0, 20)}...`,
+    });
+
     const response = await apiClient.get(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
+
+    console.log("✅ Ответ от сервера:", {
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
+      dataLength: Array.isArray(response.data)
+        ? response.data.length
+        : "не массив",
+    });
+
     return response.data; // API возвращает массив транзакций напрямую
   } catch (error) {
+    console.error("❌ Ошибка в fetchTransactions:", {
+      message: error.message,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+    });
     throw new Error(getErrorMessage(error));
   }
 }

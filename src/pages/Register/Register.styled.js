@@ -1,36 +1,35 @@
 import styled from "styled-components";
-import { THEME } from "../../constants/theme";
 
 export const RegisterContainer = styled.div`
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  background-color: ${THEME.colors.background};
+  align-items: center;
+  justify-content: center;
+  background-color: #f4f5f6;
 `;
 
 export const RegisterCard = styled.div`
-  background-color: ${THEME.colors.white};
-  border-radius: ${THEME.borderRadius.large};
+  background-color: #ffffff;
+  border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   padding: 48px;
   width: 100%;
-  max-width: 379px;
-  margin: auto;
+  max-width: 400px;
 `;
 
 export const RegisterTitle = styled.h1`
-  font-family: ${THEME.fonts.family};
-  font-weight: ${THEME.fonts.weights.bold};
-  font-size: ${THEME.fonts.sizes.xl};
+  font-family: "Montserrat", sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: #1e293b;
   text-align: center;
-  color: ${THEME.colors.gray[700]};
   margin-bottom: 32px;
 `;
 
 export const RegisterForm = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 20px;
 `;
 
 export const FormGroup = styled.div`
@@ -39,66 +38,50 @@ export const FormGroup = styled.div`
 `;
 
 export const Label = styled.label`
-  font-family: ${THEME.fonts.family};
-  font-size: ${THEME.fonts.sizes.sm};
-  font-weight: ${THEME.fonts.weights.medium};
-  color: ${THEME.colors.gray[600]};
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
   margin-bottom: 8px;
 `;
 
 export const Input = styled.input`
-  font-family: ${THEME.fonts.family};
-  font-size: ${THEME.fonts.sizes.base};
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
   padding: 12px 16px;
-  border: 1px solid ${THEME.colors.gray[300]};
-  border-radius: ${THEME.borderRadius.small};
-  background-color: ${THEME.colors.white};
-  color: ${THEME.colors.gray[700]};
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
-
-  &::placeholder {
-    font-family: ${THEME.fonts.family};
-    font-weight: ${THEME.fonts.weights.normal};
-    font-style: normal;
-    font-size: ${THEME.fonts.sizes.xs};
-    color: ${THEME.colors.gray[400]};
-  }
-
-  &:not(:placeholder-shown) {
-    color: ${THEME.colors.gray[700]};
-    font-weight: ${THEME.fonts.weights.medium};
-  }
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #1f2937;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
   &:focus {
     outline: none;
-    border-color: ${THEME.colors.primary};
+    border-color: #7334ea;
     box-shadow: 0 0 0 3px rgba(115, 52, 234, 0.1);
-    color: ${THEME.colors.gray[700]};
   }
 
-  &:focus::placeholder {
-    color: ${THEME.colors.gray[400]};
+  &::placeholder {
+    color: #9ca3af;
   }
 `;
 
 export const RegisterButton = styled.button`
   width: 100%;
-  font-family: ${THEME.fonts.family};
-  font-weight: ${THEME.fonts.weights.semibold};
-  font-style: normal;
-  font-size: ${THEME.fonts.sizes.xs};
-  text-align: center;
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
   padding: 12px;
   border: none;
-  border-radius: ${THEME.borderRadius.small};
-  background-color: ${THEME.colors.primary};
-  color: ${THEME.colors.white};
+  border-radius: 8px;
+  background-color: #7334ea;
+  color: #ffffff;
   cursor: pointer;
   transition: background-color 0.2s ease;
   margin-top: 8px;
 
   &:hover {
-    background-color: ${THEME.colors.primaryHover};
+    background-color: #5b21b6;
   }
 
   &:focus {
@@ -107,24 +90,20 @@ export const RegisterButton = styled.button`
   }
 `;
 
-export const LoginLink = styled.div`
-  font-family: ${THEME.fonts.family};
-  font-size: ${THEME.fonts.sizes.sm};
-  color: #999999;
+export const LoginLink = styled.p`
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  color: #6b7280;
   text-align: center;
   margin-top: 24px;
 
-  p {
-    margin: 0 0 8px 0;
-  }
-
   a {
-    color: #999999;
-    text-decoration: underline;
-    font-weight: ${THEME.fonts.weights.normal};
+    color: #7334ea;
+    text-decoration: none;
+    font-weight: 500;
 
     &:hover {
-      color: ${THEME.colors.gray[600]};
+      text-decoration: underline;
     }
   }
 `;

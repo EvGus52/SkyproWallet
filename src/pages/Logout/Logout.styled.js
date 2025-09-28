@@ -1,17 +1,16 @@
 import styled from "styled-components";
-import { THEME } from "../../constants/theme";
 
 export const LogoutContainer = styled.div`
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${THEME.colors.background};
+  background-color: #f4f5f6;
 `;
 
 export const LogoutCard = styled.div`
-  background-color: ${THEME.colors.white};
-  border-radius: ${THEME.borderRadius.medium};
+  background-color: #ffffff;
+  border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   padding: 48px;
   width: 100%;
@@ -25,16 +24,16 @@ export const LogoutIcon = styled.div`
 `;
 
 export const LogoutTitle = styled.h1`
-  font-family: ${THEME.fonts.family};
-  font-size: ${THEME.fonts.sizes.xl};
-  font-weight: ${THEME.fonts.weights.semibold};
-  color: ${THEME.colors.gray[700]};
+  font-family: "Montserrat", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1e293b;
   margin-bottom: 16px;
 `;
 
 export const LogoutMessage = styled.p`
-  font-family: ${THEME.fonts.family};
-  font-size: ${THEME.fonts.sizes.base};
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
   color: #64748b;
   margin-bottom: 32px;
   line-height: 1.5;
@@ -47,14 +46,14 @@ export const ButtonGroup = styled.div`
 `;
 
 export const ConfirmButton = styled.button`
-  font-family: ${THEME.fonts.family};
-  font-size: ${THEME.fonts.sizes.base};
-  font-weight: ${THEME.fonts.weights.semibold};
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
   padding: 12px 24px;
   border: none;
-  border-radius: ${THEME.borderRadius.small};
+  border-radius: 8px;
   background-color: #ef4444;
-  color: ${THEME.colors.white};
+  color: #ffffff;
   cursor: pointer;
   transition: background-color 0.2s ease;
 
@@ -69,14 +68,14 @@ export const ConfirmButton = styled.button`
 `;
 
 export const CancelButton = styled.button`
-  font-family: ${THEME.fonts.family};
-  font-size: ${THEME.fonts.sizes.base};
-  font-weight: ${THEME.fonts.weights.semibold};
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
   padding: 12px 24px;
-  border: 1px solid ${THEME.colors.gray[300]};
-  border-radius: ${THEME.borderRadius.small};
-  background-color: ${THEME.colors.white};
-  color: ${THEME.colors.gray[600]};
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #374151;
   cursor: pointer;
   transition: all 0.2s ease;
 

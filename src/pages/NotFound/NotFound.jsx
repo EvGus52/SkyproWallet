@@ -14,10 +14,12 @@ const NotFound = () => {
   const navigate = useNavigate();
 
   const handleGoHome = () => {
+    console.log("Переход на главную");
     navigate("/");
   };
 
   const handleGoBack = () => {
+    console.log("Возврат назад");
     navigate(-1); // Возврат на предыдущую страницу
   };
 

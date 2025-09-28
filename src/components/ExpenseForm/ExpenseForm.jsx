@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useState } from "react";
 import {
   FormWrapper,
   FormTitle,
@@ -6,184 +6,191 @@ import {
   FormGroup,
   Label,
   Input,
-  CategoriesContainer,
+  CategoriesGrid,
   CategoryButton,
   CategoryIcon,
   PrimaryButton,
 } from "./ExpenseForm.styled";
 
-const ExpenseForm = ({ onSubmit, onCancel, isFormSubmitting = false }) => {
-  const { register, handleSubmit, setValue, watch, reset, formState } = useForm(
-    {
-      defaultValues: {
-        description: "",
-        category: "",
-        date: "",
-        amount: "",
-      },
-    }
-  );
+const ExpenseForm = ({ onSubmit, onCancel }) => {
+  const [formData, setFormData] = useState({
+    description: "",
+    category: "",
+    date: "",
+    amount: "",
+  });
 
   const categories = [
-    { name: "Еда", value: "food", icon: "/images/icons/category1.svg" },
-    {
-      name: "Транспорт",
-      value: "transport",
-      icon: "/images/icons/category2.svg",
-    },
-    { name: "Жилье", value: "housing", icon: "/images/icons/category3.svg" },
-    { name: "Развлечения", value: "joy", icon: "/images/icons/category4.svg" },
-    {
-      name: "Образование",
-      value: "education",
-      icon: "/images/icons/category5.svg",
-    },
-    { name: "Другое", value: "others", icon: "/images/icons/category6.svg" },
+    { name: "Еда", icon: "/images/icons/category1.svg" },
+    { name: "Транспорт", icon: "/images/icons/category2.svg" },
+    { name: "Жилье", icon: "/images/icons/category3.svg" },
+    { name: "Развлечения", icon: "/images/icons/category4.svg" },
+    { name: "Образование", icon: "/images/icons/category5.svg" },
+    { name: "Другое", icon: "/images/icons/category6.svg" },
   ];
 
-  const selectedCategory = watch("category");
-
-  const handleCategorySelect = (categoryValue) => {
-    setValue("category", categoryValue, { shouldValidate: true });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const onFormSubmit = (data) => {
-    // Подготовка данных для отправки в формате API
+  const handleCategorySelect = (categoryName) => {
+    setFormData((prev) => ({
+      ...prev,
+      category: categoryName,
+    }));
+  };
+
+  // Проверка валидности полей
+  const isFieldValid = (fieldName) => {
+    switch (fieldName) {
+      case "description":
+        return formData.description.trim().length > 0;
+      case "date":
+        return formData.date !== "";
+      case "amount":
+        return formData.amount !== "" && parseFloat(formData.amount) > 0;
+      default:
+        return false;
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Валидация
+    if (!formData.description.trim()) {
+      alert("Пожалуйста, введите описание");
+      return;
+    }
+    if (!formData.category) {
+      alert("Пожалуйста, выберите категорию");
+      return;
+    }
+    if (!formData.date) {
+      alert("Пожалуйста, выберите дату");
+      return;
+    }
+    if (!formData.amount || parseFloat(formData.amount) <= 0) {
+      alert("Пожалуйста, введите корректную сумму");
+      return;
+    }
+
+    // Подготовка данных для отправки
     const expenseData = {
-      description: data.description.trim(),
-      category: data.category,
-      date: formatDateForAPI(data.date),
-      sum: parseFloat(data.amount),
+      id: Date.now(), // Временный ID
+      description: formData.description.trim(),
+      category: formData.category,
+      date: formatDate(formData.date),
+      amount: parseFloat(formData.amount),
     };
 
     onSubmit?.(expenseData);
-    reset(); // Автоматическая очистка формы
+
+    // Очистка формы
+    setFormData({
+      description: "",
+      category: "",
+      date: "",
+      amount: "",
+    });
   };
 
-  const _handleCancel = () => {
-    reset(); // Очистка формы
+  const handleCancel = () => {
+    // Очистка формы
+    setFormData({
+      description: "",
+      category: "",
+      date: "",
+      amount: "",
+    });
     onCancel?.();
   };
 
-  // Функция для форматирования даты в формат API (M-D-YYYY)
-  const formatDateForAPI = (dateString) => {
+  // Функция для форматирования даты в DD.MM.YYYY
+  const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
-    return `${month}-${day}-${year}`;
+    return `${day}.${month}.${year}`;
+  };
+
+  // Получение текущей даты для input[type="date"]
+  const getCurrentDate = () => {
+    const today = new Date();
+    return today.toISOString().split("T")[0];
   };
 
   return (
     <FormWrapper>
       <FormTitle>Новый расход</FormTitle>
-      <Form onSubmit={handleSubmit(onFormSubmit)}>
+      <Form onSubmit={handleSubmit}>
         <FormGroup>
           <Label htmlFor="description">Описание</Label>
           <Input
             id="description"
-            {...register("description", {
-              required: "Введите описание",
-              minLength: {
-                value: 1,
-                message: "Описание не может быть пустым",
-              },
-            })}
+            name="description"
             type="text"
-            placeholder="Введите описание"
+            value={formData.description}
+            onChange={handleChange}
+            placeholder="Пятерочка"
+            className={isFieldValid("description") ? "valid" : ""}
+            required
           />
-          {formState.errors.description && (
-            <span style={{ color: "red", fontSize: "12px" }}>
-              {formState.errors.description.message}
-            </span>
-          )}
         </FormGroup>
 
         <FormGroup>
           <Label>Категория</Label>
-          <CategoriesContainer>
+          <CategoriesGrid>
             {categories.map((category) => (
               <CategoryButton
-                key={category.value}
+                key={category.name}
                 type="button"
-                $selected={selectedCategory === category.value}
-                onClick={() => handleCategorySelect(category.value)}
+                $selected={formData.category === category.name}
+                onClick={() => handleCategorySelect(category.name)}
               >
-                <CategoryIcon
-                  src={category.icon}
-                  alt={category.name}
-                  $selected={selectedCategory === category.value}
-                />
+                <CategoryIcon src={category.icon} alt={category.name} />
                 {category.name}
               </CategoryButton>
             ))}
-          </CategoriesContainer>
-          {/* Скрытое поле для валидации категории */}
-          <input
-            {...register("category", {
-              required: "Выберите категорию",
-            })}
-            type="hidden"
-          />
-          {formState.errors.category && (
-            <span style={{ color: "red", fontSize: "12px" }}>
-              {formState.errors.category.message}
-            </span>
-          )}
+          </CategoriesGrid>
         </FormGroup>
 
         <FormGroup>
           <Label htmlFor="date">Дата</Label>
           <Input
             id="date"
-            {...register("date", {
-              required: "Выберите дату",
-            })}
+            name="date"
             type="date"
-            placeholder="Выберите дату"
+            value={formData.date}
+            onChange={handleChange}
+            max={getCurrentDate()}
+            className={isFieldValid("date") ? "valid" : ""}
+            required
           />
-          {formState.errors.date && (
-            <span style={{ color: "red", fontSize: "12px" }}>
-              {formState.errors.date.message}
-            </span>
-          )}
         </FormGroup>
 
         <FormGroup>
           <Label htmlFor="amount">Сумма</Label>
           <Input
             id="amount"
-            {...register("amount", {
-              required: "Введите сумму",
-              min: {
-                value: 0.01,
-                message: "Сумма должна быть больше 0",
-              },
-              pattern: {
-                value: /^\d+(\.\d{1,2})?$/,
-                message: "Введите корректную сумму",
-              },
-            })}
+            name="amount"
             type="number"
-            placeholder="Введите сумму"
+            value={formData.amount}
+            onChange={handleChange}
+            placeholder="3 500"
             min="0.01"
             step="0.01"
+            className={isFieldValid("amount") ? "valid" : ""}
+            required
           />
-          {formState.errors.amount && (
-            <span style={{ color: "red", fontSize: "12px" }}>
-              {formState.errors.amount.message}
-            </span>
-          )}
         </FormGroup>
 
-        <PrimaryButton
-          type="submit"
-          disabled={isFormSubmitting || formState.isSubmitting}
-        >
-          {isFormSubmitting || formState.isSubmitting
-            ? "Добавление..."
-            : "Добавить новый расход"}
-        </PrimaryButton>
+        <PrimaryButton type="submit">Добавить новый расход</PrimaryButton>
       </Form>
     </FormWrapper>
   );

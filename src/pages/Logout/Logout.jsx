@@ -1,6 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { signOut } from "../../services/Auth";
-import { useTransactions } from "../../contexts/TransactionsContextProvider";
 import {
   LogoutContainer,
   LogoutCard,
@@ -14,32 +12,16 @@ import {
 
 const Logout = () => {
   const navigate = useNavigate();
-  const { clearTransactions } = useTransactions();
 
-  const handleLogout = async () => {
-    try {
-      const token = localStorage.getItem("token");
-
-      if (token) {
-        // Вызываем API для выхода из системы
-        await signOut(token);
-      }
-
-      // Очищаем локальные данные
-      localStorage.removeItem("token");
-      clearTransactions();
-
-      navigate("/login");
-    } catch (error) {
-      console.error("Ошибка при выходе:", error);
-      // Даже если API вызов не удался, очищаем локальные данные
-      localStorage.removeItem("token");
-      clearTransactions();
-      navigate("/login");
-    }
+  const handleLogout = () => {
+    console.log("Выход из аккаунта");
+    // Здесь будет логика выхода из аккаунта
+    // Очистка токена, редирект на логин и т.д.
+    navigate("/login");
   };
 
   const handleCancel = () => {
+    console.log("Отмена выхода");
     navigate("/my-expenses");
   };
 

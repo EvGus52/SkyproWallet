@@ -1,29 +1,26 @@
-import { BrowserRouter as Router } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import "react-confirm-alert/src/react-confirm-alert.css";
-import { TransactionsProvider } from "./contexts/TransactionsContextProvider";
-import AppRoutes from "./Routes/AppRoutes";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  Login,
+  Register,
+  MyExpenses,
+  Analytics,
+  Logout,
+  NotFound,
+} from "./pages";
 
 function App() {
   return (
-    <TransactionsProvider>
-      <Router>
-        <AppRoutes />
-      </Router>
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-    </TransactionsProvider>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/" element={<MyExpenses />} />
+        <Route path="/my-expenses" element={<MyExpenses />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/logout" element={<Logout />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Router>
   );
 }
 

@@ -1,60 +1,37 @@
 import styled from "styled-components";
-import { THEME } from "../../constants/theme";
 
 export const TableWrapper = styled.div`
-  background-color: ${THEME.colors.white};
-  border-radius: ${THEME.borderRadius.large};
+  background-color: #ffffff;
+  border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  height: 618px;
-  display: flex;
-  flex-direction: column;
+  padding: 32px;
 `;
 
 export const TableTitle = styled.h2`
-  font-family: ${THEME.fonts.family};
-  font-weight: ${THEME.fonts.weights.bold};
-  font-style: normal;
-  font-size: ${THEME.fonts.sizes.xl};
-  padding: 24px;
-  color: ${THEME.colors.gray[700]};
+  width: 282px;
+  height: 29px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 24px 0;
   opacity: 1;
 `;
 
 export const TableContainer = styled.div`
-  overflow-y: auto;
-  overflow-x: hidden;
-  border-radius: ${THEME.borderRadius.small};
-  flex: 1;
-  scrollbar-gutter: stable;
-
-  /* Стили для скроллбара */
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: #d9d9d9;
-    border-radius: ${THEME.borderRadius.large};
-    opacity: 1;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: #d9d9d9;
-  }
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid #f1f5f9;
 `;
 
 export const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
-  font-family: ${THEME.fonts.family};
+  font-family: "Montserrat", sans-serif;
 `;
 
 export const TableHeader = styled.thead`
-  background-color: ${THEME.colors.white};
+  background-color: #ffffff;
 `;
 
 export const HeaderRow = styled.tr``;
@@ -62,11 +39,9 @@ export const HeaderRow = styled.tr``;
 export const HeaderCell = styled.th`
   padding: 16px 20px;
   text-align: left;
-  font-family: ${THEME.fonts.family};
-  font-weight: ${THEME.fonts.weights.normal};
-  font-style: normal;
-  font-size: ${THEME.fonts.sizes.xs};
-  color: #999999;
+  font-weight: 600;
+  font-size: 14px;
+  color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border-bottom: 1px solid #e2e8f0;
@@ -83,15 +58,17 @@ export const HeaderCell = styled.th`
 
 export const TableBody = styled.tbody``;
 
-export const TableRow = styled.tr``;
+export const TableRow = styled.tr`
+  &:not(:last-child) {
+    border-bottom: 1px solid #f1f5f9;
+  }
+`;
 
 export const TableCell = styled.td`
-  padding: 4px 20px;
-  font-family: ${THEME.fonts.family};
-  font-weight: ${THEME.fonts.weights.normal};
-  font-style: normal;
-  font-size: ${THEME.fonts.sizes.xs};
-  color: ${THEME.colors.black};
+  padding: 16px 20px;
+  font-size: 14px;
+  color: #334155;
+  vertical-align: middle;
 
   &:first-child {
     padding-left: 24px;
@@ -104,12 +81,12 @@ export const TableCell = styled.td`
 `;
 
 export const DateCell = styled(TableCell)`
-  color: ${THEME.colors.black};
-  font-weight: ${THEME.fonts.weights.normal};
+  color: #64748b;
+  font-weight: 500;
 `;
 
 export const CategoryCell = styled(TableCell)`
-  font-weight: ${THEME.fonts.weights.normal};
+  font-weight: 500;
 `;
 
 export const DeleteCell = styled(TableCell)`
@@ -127,7 +104,7 @@ export const DeleteButton = styled.button`
   border: none;
   cursor: pointer;
   padding: 4px;
-  border-radius: ${THEME.borderRadius.small};
+  border-radius: 4px;
   transition: opacity 0.2s ease;
 
   &:hover {
@@ -141,9 +118,9 @@ export const DeleteIcon = styled.img`
 `;
 
 export const AmountCell = styled(TableCell)`
-  font-weight: ${THEME.fonts.weights.normal};
-  font-size: ${THEME.fonts.sizes.xs};
-  color: ${THEME.colors.black};
+  font-weight: 600;
+  font-size: 16px;
+  color: #334155;
 `;
 
 export const DescriptionCell = styled(TableCell)`

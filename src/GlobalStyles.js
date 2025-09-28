@@ -42,7 +42,7 @@ const GlobalStyles = createGlobalStyle`
     min-height: 100vh;
   }
   .center {
-    max-width: 1440px;
+    max-width: 1200px;
     margin: 0 auto;
     padding-left: 24px;
     padding-right: 24px;
