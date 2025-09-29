@@ -6,7 +6,7 @@ import TransactionTable from "../../components/TransactionTable/TransactionTable
 import { useTransactions } from "../../contexts/TransactionsContextProvider";
 import GlobalStyles, {
   FormColumn,
-  TableGridArea,
+  TableGridArea, 
   FormGridArea,
 } from "../../GlobalStyles";
 

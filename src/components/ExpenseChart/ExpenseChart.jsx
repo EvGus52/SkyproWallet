@@ -10,7 +10,7 @@ import {
   BarColumn,
   BarValue,
   BarCategory,
-} from "./ExpenseChart.styled";
+} from "./ExpenseChart.styled"; 
 
 const ExpenseChart = ({ data = [], selectedDate, totalAmount = 0 }) => {
   if (!data || data.length === 0) {

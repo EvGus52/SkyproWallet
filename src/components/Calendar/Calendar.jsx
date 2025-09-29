@@ -9,7 +9,7 @@ import {
   MonthSection,
   CalendarGrid,
   CalendarDay,
-} from "./Calendar.styled";
+} from "./Calendar.styled"; 
 
 const Calendar = ({ selectedDate, onDateSelect }) => {
   const [displayedMonths] = useState([6, 7, 8, 9, 10, 11]); // Июль - Декабрь 2024

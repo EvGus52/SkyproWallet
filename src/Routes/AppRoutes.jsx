@@ -19,7 +19,7 @@ const AppRoutes = () => {
             <MyExpenses />
           </PrivateRoute>
         }
-      />
+      /> 
       <Route
         path="/my-expenses"
         element={

@@ -6,7 +6,7 @@ import {
   FormGroup,
   Label,
   Input,
-  CategoriesContainer,
+  CategoriesContainer, 
   CategoryButton,
   CategoryIcon,
   PrimaryButton,

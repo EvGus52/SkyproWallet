@@ -17,7 +17,7 @@ export const useTransactions = () => {
       "useTransactions must be used within a TransactionsProvider"
     );
   }
-  return context;
+  return context; 
 };
 
 export const TransactionsProvider = ({ children }) => {

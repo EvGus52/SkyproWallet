@@ -7,7 +7,7 @@ const API_URL = "https://wedev-api.sky.pro/api/transactions";
 const apiClient = axios.create({
   timeout: 10000,
 });
-
+ 
 export async function validateToken({ token }) {
   try {
     const response = await apiClient.get(API_URL, {

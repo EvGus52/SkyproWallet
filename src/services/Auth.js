@@ -5,7 +5,7 @@ const API_URL = "https://wedev-api.sky.pro/api";
 
 // Простая настройка axios для авторизации
 const authClient = axios.create({
-  timeout: 10000,
+  timeout: 10000, 
 });
 
 /**
