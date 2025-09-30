@@ -71,10 +71,29 @@ export async function getTransactionsByPeriod({ token, period }) {
     const response = await apiClient.post(`${API_URL}/period`, period, {
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": " ",
+        "Content-Type": "application/json",
       },
     });
     return response.data; // API возвращает массив транзакций за период
+  } catch (error) {
+    throw new Error(getErrorMessage(error));
+  }
+}
+
+/**
+ * Получить все транзакции для аналитики
+ * @param {Object} params - Параметры запроса
+ * @param {string} params.token - Токен авторизации
+ * @returns {Promise<Array>} Массив всех транзакций
+ */
+export async function fetchAllTransactions({ token }) {
+  try {
+    const response = await apiClient.get(API_URL, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data; // API возвращает массив транзакций
   } catch (error) {
     throw new Error(getErrorMessage(error));
   }
