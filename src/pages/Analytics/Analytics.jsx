@@ -7,7 +7,7 @@ import {
   AnalyticsContainer,
   AnalyticsTitle,
   AnalyticsContent,
-} from "./Analytics.styled";
+} from "./Analytics.styled"; 
 
 const Analytics = () => {
   const [selectedDate, setSelectedDate] = useState(new Date("2024-07-10"));

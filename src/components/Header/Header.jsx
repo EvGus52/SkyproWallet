@@ -27,7 +27,7 @@ const Header = () => {
     clearTransactions();
 
     toastUtils.success("Вы успешно вышли из аккаунта");
-    navigate("/login");
+    navigate("/login"); 
   };
 
   const handleLogoutClick = () => {
