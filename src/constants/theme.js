@@ -36,5 +36,5 @@ export const THEME = {
       semibold: 600,
       bold: 700,
     },
-  },
+  }, 
 };
