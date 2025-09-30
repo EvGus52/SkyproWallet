@@ -47,10 +47,6 @@ export const DateText = styled.div`
 `;
 
 export const ChartArea = styled.div`
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 32px;
   width: 725px;
   height: 387px;
   position: absolute;
@@ -59,68 +55,17 @@ export const ChartArea = styled.div`
   padding: 0;
   margin: 0;
   opacity: 1;
-`;
 
-export const BarWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
-  height: 100%;
-  position: relative;
-  min-width: 0;
-`;
+  /* Стили для Chart.js */
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
 
-export const BarColumn = styled.div`
-  width: 94px;
-  border-radius: 12px;
-  transition: height 0.3s ease;
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  opacity: 1;
-`;
-
-export const BarValue = styled.div`
-  font-family: ${THEME.fonts.family};
-  font-size: ${THEME.fonts.sizes.base};
-  font-weight: ${THEME.fonts.weights.semibold};
-  font-style: normal;
-  line-height: 100%;
-  letter-spacing: 0px;
-  color: ${THEME.colors.gray[700]};
-  text-align: center;
-  white-space: nowrap;
-  position: absolute;
-  top: -32px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 94px;
-  height: 20px;
-  opacity: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-export const BarCategory = styled.div`
-  font-family: ${THEME.fonts.family};
-  font-size: ${THEME.fonts.sizes.xs};
-  font-weight: ${THEME.fonts.weights.normal};
-  font-style: normal;
-  line-height: 100%;
-  letter-spacing: 0px;
-  color: ${THEME.colors.black};
-  text-align: center;
-  position: absolute;
-  bottom: -24px;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 94px;
+  /* Скрываем легенду */
+  .chartjs-legend {
+    display: none;
+  }
 `;
 
 export const NoDataMessage = styled.div`
