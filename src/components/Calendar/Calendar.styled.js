@@ -39,24 +39,17 @@ export const CalendarContainer = styled.div`
 
 export const PeriodBlock = styled.div`
   width: 100%;
-  height: 113px;
+  height: 60px;
   background: ${THEME.colors.white};
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  padding: 0 32px;
+  padding: 32px;
 `;
 
 export const CalendarHeader = styled.div`
-  width: 315px;
-  height: 29px;
-  position: absolute;
-  top: 32px;
-  left: 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  opacity: 1;
 
   h3 {
     font-family: ${THEME.fonts.family};
@@ -67,8 +60,6 @@ export const CalendarHeader = styled.div`
     margin: 0;
   }
 `;
-
-// Убираем CalendarScrollArea, так как он больше не нужен
 
 export const WeekDaysBlock = styled.div`
   display: grid;
@@ -106,7 +97,7 @@ export const MonthSection = styled.div`
   flex-direction: column;
   background: ${THEME.colors.white};
   overflow-y: auto;
-  padding: 16px;
+  padding: 14px;
 
   .month-row {
     display: flex;
@@ -163,7 +154,7 @@ export const CalendarDay = styled.div`
     letter-spacing: 0%;
     text-align: center;
     color: ${(props) => {
-      if (props.$isSelected) return THEME.colors.primary;
+      if (props.$isSelected || props.$inRange) return "#7334EA";
       return THEME.colors.gray[700];
     }};
   }
@@ -178,18 +169,24 @@ export const CalendarDay = styled.div`
   }
 
   background-color: ${(props) => {
-    if (props.$isSelected) return "#F1EBFD";
+    if (props.$isSelected || props.$inRange) return "#F1EBFD";
+    if (props.$isBoundary) return "#F1EBFD";
+    if (props.$isToday) return "#f1f5f9";
     return "transparent";
   }};
 
   border: ${(props) => {
-    if (props.$isSelected) return "none";
+    if (props.$isSelected || props.$inRange) return "none";
+    if (props.$isBoundary) return "2px solid #7334EA";
+    if (props.$isToday) return "1px solid #cbd5e1";
     return "1px solid transparent";
   }};
 
   &:hover {
     background-color: ${(props) => {
-      if (props.$isSelected) return "#F1EBFD";
+      if (props.$isSelected || props.$inRange) return "#F1EBFD";
+      if (props.$isBoundary) return "#E8D5FF";
+      if (props.$isToday) return "#e2e8f0";
       return "#f1f5f9";
     }};
   }

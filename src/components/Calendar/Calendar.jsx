@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   CalendarContainer,
   PeriodBlock,
@@ -12,7 +12,81 @@ import {
 } from "./Calendar.styled";
 
 const Calendar = ({ selectedDate, onDateSelect }) => {
-  const [displayedMonths] = useState([6, 7, 8, 9, 10, 11]); // Июль - Декабрь 2024
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth();
+  const currentMonthRef = useRef(null);
+
+  // Состояние для выбора диапазона дат
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [isSelectingRange, setIsSelectingRange] = useState(false);
+
+  // Показываем текущий месяц и 11 месяцев назад
+  const [displayedMonths] = useState(() => {
+    const months = [];
+    for (let i = -11; i <= 0; i++) {
+      const monthIndex = currentMonth + i;
+      const yearOffset = Math.floor(monthIndex / 12);
+      const actualMonth = ((monthIndex % 12) + 12) % 12;
+      months.push({
+        month: actualMonth,
+        yearOffset: yearOffset,
+      });
+    }
+    return months;
+  });
+
+  // Прокручиваем к текущему месяцу при загрузке компонента
+  useEffect(() => {
+    if (currentMonthRef.current) {
+      currentMonthRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, []);
+
+  // Функция для обработки выбора даты
+  const handleDateClick = (date) => {
+    if (!isSelectingRange || !startDate) {
+      // Начинаем новый диапазон
+      setStartDate(date);
+      setEndDate(null);
+      setIsSelectingRange(true);
+      onDateSelect &&
+        onDateSelect({ startDate: date, endDate: null, type: "range" });
+    } else {
+      // Завершаем диапазон
+      if (date < startDate) {
+        // Если новая дата раньше начальной, меняем их местами
+        setEndDate(startDate);
+        setStartDate(date);
+        onDateSelect &&
+          onDateSelect({ startDate: date, endDate: startDate, type: "range" });
+      } else {
+        setEndDate(date);
+        onDateSelect &&
+          onDateSelect({ startDate, endDate: date, type: "range" });
+      }
+      setIsSelectingRange(false);
+    }
+  };
+
+  // Функция для проверки, находится ли дата в выбранном диапазоне
+  const isDateInRange = (date) => {
+    if (!startDate) return false;
+    if (!endDate) return date.toDateString() === startDate.toDateString();
+    return date >= startDate && date <= endDate;
+  };
+
+  // Функция для проверки, является ли дата началом или концом диапазона
+  const isRangeBoundary = (date) => {
+    if (!startDate) return false;
+    if (date.toDateString() === startDate.toDateString()) return true;
+    if (endDate && date.toDateString() === endDate.toDateString()) return true;
+    return false;
+  };
 
   const getDaysInMonth = (date) => {
     const year = date.getFullYear();
@@ -20,7 +94,11 @@ const Calendar = ({ selectedDate, onDateSelect }) => {
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const daysInMonth = lastDay.getDate();
-    const startingDayOfWeek = firstDay.getDay();
+    // Исправляем день недели: в JS воскресенье = 0, понедельник = 1, но нам нужен понедельник = 0
+    let startingDayOfWeek = firstDay.getDay();
+    if (startingDayOfWeek === 0)
+      startingDayOfWeek = 6; // Воскресенье становится 6
+    else startingDayOfWeek = startingDayOfWeek - 1; // Понедельник становится 0
 
     return { daysInMonth, startingDayOfWeek };
   };
@@ -39,16 +117,23 @@ const Calendar = ({ selectedDate, onDateSelect }) => {
     // Дни месяца
     for (let day = 1; day <= daysInMonth; day++) {
       const date = new Date(year, month, day);
-      const isToday = false; // Убираем автоматическое выделение сегодняшней даты
+      const isToday =
+        date.getDate() === currentDate.getDate() &&
+        date.getMonth() === currentDate.getMonth() &&
+        date.getFullYear() === currentDate.getFullYear();
       const isSelected =
         selectedDate && date.toDateString() === selectedDate.toDateString();
+      const inRange = isDateInRange(date);
+      const isBoundary = isRangeBoundary(date);
 
       days.push(
         <CalendarDay
           key={`${year}-${month}-${day}`}
           $isToday={isToday}
           $isSelected={isSelected}
-          onClick={() => onDateSelect && onDateSelect(date)}
+          $inRange={inRange}
+          $isBoundary={isBoundary}
+          onClick={() => handleDateClick(date)}
         >
           <span>{day}</span>
         </CalendarDay>
@@ -75,8 +160,6 @@ const Calendar = ({ selectedDate, onDateSelect }) => {
 
   const weekDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
 
-  // Показываем только текущий месяц
-
   return (
     <CalendarContainer>
       <PeriodBlock>
@@ -94,12 +177,25 @@ const Calendar = ({ selectedDate, onDateSelect }) => {
       <SeparatorLine />
 
       <MonthSection>
-        {displayedMonths.map((monthIndex) => (
-          <div key={monthIndex} className="month-row">
-            <div className="month-header">{monthNames[monthIndex]} 2024</div>
-            <CalendarGrid>{renderMonth(2024, monthIndex)}</CalendarGrid>
-          </div>
-        ))}
+        {displayedMonths.map((monthData) => {
+          const year = currentYear + monthData.yearOffset;
+          const actualMonth = monthData.month;
+          const isCurrentMonth =
+            year === currentYear && actualMonth === currentMonth;
+
+          return (
+            <div
+              key={`${year}-${actualMonth}`}
+              className="month-row"
+              ref={isCurrentMonth ? currentMonthRef : null}
+            >
+              <div className="month-header">
+                {monthNames[actualMonth]} {year}
+              </div>
+              <CalendarGrid>{renderMonth(year, actualMonth)}</CalendarGrid>
+            </div>
+          );
+        })}
       </MonthSection>
     </CalendarContainer>
   );
