@@ -8,6 +8,12 @@ export const TableWrapper = styled.div`
   height: 618px;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 768px) {
+    height: auto;
+    min-height: 400px;
+    max-height: 600px;
+  }
 `;
 
 export const TableTitle = styled.h2`
@@ -18,6 +24,11 @@ export const TableTitle = styled.h2`
   padding: 24px;
   color: ${THEME.colors.gray[700]};
   opacity: 1;
+
+  @media (max-width: 768px) {
+    font-size: ${THEME.fonts.sizes.lg};
+    padding: 16px;
+  }
 `;
 
 export const TableContainer = styled.div`
@@ -51,6 +62,10 @@ export const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
   font-family: ${THEME.fonts.family};
+
+  @media (max-width: 768px) {
+    font-size: ${THEME.fonts.sizes.xs};
+  }
 `;
 
 export const TableHeader = styled.thead`
@@ -79,6 +94,19 @@ export const HeaderCell = styled.th`
     padding-right: 24px;
     text-align: right;
   }
+
+  @media (max-width: 768px) {
+    padding: 12px 8px;
+    font-size: 10px;
+
+    &:first-child {
+      padding-left: 12px;
+    }
+
+    &:last-child {
+      padding-right: 12px;
+    }
+  }
 `;
 
 export const TableBody = styled.tbody``;
@@ -100,6 +128,19 @@ export const TableCell = styled.td`
   &:last-child {
     padding-right: 24px;
     text-align: right;
+  }
+
+  @media (max-width: 768px) {
+    padding: 6px 8px;
+    font-size: 11px;
+
+    &:first-child {
+      padding-left: 12px;
+    }
+
+    &:last-child {
+      padding-right: 12px;
+    }
   }
 `;
 
@@ -151,4 +192,12 @@ export const DescriptionCell = styled(TableCell)`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  @media (max-width: 768px) {
+    max-width: 100px;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 60px;
+  }
 `;

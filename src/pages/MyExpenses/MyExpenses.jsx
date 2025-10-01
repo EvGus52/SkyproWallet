@@ -9,6 +9,7 @@ import GlobalStyles, {
   TableGridArea,
   FormGridArea,
 } from "../../GlobalStyles";
+import { PageTitle, MainContainer } from "./MyExpenses.styled";
 
 const MyExpenses = () => {
   const { addTransaction, loadTransactions, error, clearError } =
@@ -51,17 +52,8 @@ const MyExpenses = () => {
     <>
       <GlobalStyles />
       <Header />
-      <main className="center" style={{ padding: "24px" }}>
-        <h1
-          style={{
-            marginBottom: "24px",
-            fontSize: "32px",
-            fontWeight: "700",
-            color: "#1e293b",
-          }}
-        >
-          Мои расходы
-        </h1>
+      <MainContainer className="center">
+        <PageTitle>Мои расходы</PageTitle>
 
         <FormColumn>
           <TableGridArea>
@@ -75,7 +67,7 @@ const MyExpenses = () => {
             />
           </FormGridArea>
         </FormColumn>
-      </main>
+      </MainContainer>
     </>
   );
 };

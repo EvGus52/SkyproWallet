@@ -16,6 +16,18 @@ export const RegisterCard = styled.div`
   width: 100%;
   max-width: 379px;
   margin: auto;
+
+  @media (max-width: 768px) {
+    padding: 32px 24px;
+    margin: 16px;
+    max-width: calc(100% - 32px);
+  }
+
+  @media (max-width: 480px) {
+    padding: 24px 16px;
+    margin: 12px;
+    max-width: calc(100% - 24px);
+  }
 `;
 
 export const RegisterTitle = styled.h1`
@@ -25,6 +37,11 @@ export const RegisterTitle = styled.h1`
   text-align: center;
   color: ${THEME.colors.gray[700]};
   margin-bottom: 32px;
+
+  @media (max-width: 768px) {
+    font-size: ${THEME.fonts.sizes.lg};
+    margin-bottom: 24px;
+  }
 `;
 
 export const RegisterForm = styled.form`
@@ -54,7 +71,10 @@ export const Input = styled.input`
   border-radius: ${THEME.borderRadius.small};
   background-color: ${THEME.colors.white};
   color: ${THEME.colors.gray[700]};
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    color 0.2s ease;
 
   &::placeholder {
     font-family: ${THEME.fonts.family};
