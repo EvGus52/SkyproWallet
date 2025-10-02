@@ -10,6 +10,17 @@ export const ChartWrapper = styled.div`
   height: 540px;
   position: relative;
   opacity: 1;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: auto;
+    min-height: 400px;
+    margin-bottom: 16px;
+  }
 `;
 
 export const ChartTitle = styled.h3`
@@ -30,6 +41,18 @@ export const HeaderBlock = styled.div`
   flex-direction: column;
   gap: 24px;
   opacity: 1;
+
+  @media (max-width: 1024px) {
+    width: calc(100% - 64px);
+  }
+
+  @media (max-width: 768px) {
+    width: calc(100% - 32px);
+    top: 16px;
+    left: 16px;
+    height: auto;
+    gap: 12px;
+  }
 `;
 
 export const TotalSum = styled.div`
@@ -37,6 +60,10 @@ export const TotalSum = styled.div`
   font-size: ${THEME.fonts.sizes.xl};
   font-weight: ${THEME.fonts.weights.bold};
   color: ${THEME.colors.gray[700]};
+
+  @media (max-width: 768px) {
+    font-size: ${THEME.fonts.sizes.lg};
+  }
 `;
 
 export const DateText = styled.div`
@@ -55,6 +82,17 @@ export const ChartArea = styled.div`
   padding: 0;
   margin: 0;
   opacity: 1;
+
+  @media (max-width: 1024px) {
+    width: calc(100% - 64px);
+  }
+
+  @media (max-width: 768px) {
+    width: calc(100% - 32px);
+    height: 300px;
+    top: 90px;
+    left: 16px;
+  }
 
   /* Стили для Chart.js */
   canvas {

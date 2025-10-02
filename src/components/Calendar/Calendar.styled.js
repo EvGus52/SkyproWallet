@@ -17,6 +17,14 @@ export const CalendarContainer = styled.div`
   overflow-x: hidden;
   max-width: 379px;
 
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    min-height: 450px;
+    margin-bottom: 16px;
+  }
+
   /* Стили для скроллбара */
   &::-webkit-scrollbar {
     width: 6px;
@@ -44,6 +52,12 @@ export const PeriodBlock = styled.div`
   display: flex;
   align-items: center;
   padding: 32px;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+    height: auto;
+    min-height: 50px;
+  }
 `;
 
 export const CalendarHeader = styled.div`
@@ -58,6 +72,10 @@ export const CalendarHeader = styled.div`
     font-size: ${THEME.fonts.sizes.xl};
     color: ${THEME.colors.gray[700]};
     margin: 0;
+
+    @media (max-width: 768px) {
+      font-size: ${THEME.fonts.sizes.lg};
+    }
   }
 `;
 
@@ -67,6 +85,11 @@ export const WeekDaysBlock = styled.div`
   gap: 8px;
   padding: 16px 32px;
   background: ${THEME.colors.white};
+
+  @media (max-width: 768px) {
+    padding: 12px 16px;
+    gap: 4px;
+  }
 `;
 
 export const WeekDay = styled.div`
@@ -126,6 +149,10 @@ export const CalendarGrid = styled.div`
   position: relative;
   max-width: 100%;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    gap: 4px;
+  }
 `;
 
 export const CalendarDay = styled.div`
@@ -144,6 +171,13 @@ export const CalendarDay = styled.div`
   gap: 10px;
   padding: 10px 15px;
   opacity: 1;
+
+  @media (max-width: 768px) {
+    width: 36px;
+    height: 36px;
+    padding: 8px 12px;
+    gap: 6px;
+  }
 
   span {
     font-family: ${THEME.fonts.family};
