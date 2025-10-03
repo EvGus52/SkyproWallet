@@ -24,7 +24,6 @@ const Register = () => {
   const navigate = useNavigate();
   const [serverError, setServerError] = useState("");
 
-  // режим onChange — чтобы ошибки появлялись в реальном времени
   const {
     register,
     handleSubmit,
@@ -49,43 +48,32 @@ const Register = () => {
   const emailMeasureRef = useRef(null);
   const passwordMeasureRef = useRef(null);
 
-  // позиции для звёздочек
   const [nameStarLeft, setNameStarLeft] = useState(12);
   const [emailStarLeft, setEmailStarLeft] = useState(12);
   const [passwordStarLeft, setPasswordStarLeft] = useState(12);
 
-  // helper: обновляем позицию звезды для указанного поля
   const updateStar = (inputRef, measureRef, setLeft) => {
     if (!inputRef?.current || !measureRef?.current) return;
     const inputEl = inputRef.current;
     const measureEl = measureRef.current;
 
-    // текст для измерения: если есть введённый текст — измеряем его,
-    // если пусто — измерим placeholder (чтобы звезда стояла в начале).
     const textToMeasure = inputEl.value || inputEl.placeholder || "";
-    // используем white-space: pre в measureSpan, поэтому заменяем пробелы
     measureEl.textContent = textToMeasure;
 
-    const textWidth = measureEl.getBoundingClientRect().width; // ширина текста
+    const textWidth = measureEl.getBoundingClientRect().width;
     const inputRect = inputEl.getBoundingClientRect();
     const inputPaddingLeft =
       parseFloat(getComputedStyle(inputEl).paddingLeft) || 12;
-    const starOffset = 6; // расстояние между текстом и звездой
+    const starOffset = 6;
 
-    // вычисляем left: базовая позиция = paddingLeft + текстовая ширина + offset
     let left = inputPaddingLeft + textWidth + starOffset;
-
-    // не позволяем звезде вылезти за правый край input'а
-    const maxLeft = inputRect.width - 12; // 12px запас справа
+    const maxLeft = inputRect.width - 12;
     if (left > maxLeft) left = maxLeft;
-
-    // если поле пустое — ставим звезду внутрь слева (начало)
     if (!inputEl.value) left = inputPaddingLeft;
 
     setLeft(Math.round(left));
   };
 
-  // обновляем позиции при изменении значений или при ресайзе
   useEffect(() => {
     updateStar(nameInputRef, nameMeasureRef, setNameStarLeft);
   }, [nameValue, errors.name]);
@@ -98,7 +86,6 @@ const Register = () => {
     updateStar(passwordInputRef, passwordMeasureRef, setPasswordStarLeft);
   }, [passwordValue, errors.password]);
 
-  // обновлять при изменении размеров окна (чтобы звезда не "вылетала")
   useEffect(() => {
     const handleResize = () => {
       updateStar(nameInputRef, nameMeasureRef, setNameStarLeft);
@@ -112,7 +99,14 @@ const Register = () => {
   const onSubmit = async (data) => {
     setServerError("");
     try {
-      const result = await signUp(data);
+      // Маппим email → login для API
+      const payload = {
+        name: data.name,
+        login: data.email,
+        password: data.password,
+      };
+
+      const result = await signUp(payload);
       setToken(result.user.token);
       setUserData(result.user);
       navigate("/");
@@ -122,14 +116,11 @@ const Register = () => {
     }
   };
 
-  // если ошибка в любом поле — звезда показывается; кнопка станет неактивной, если есть ошибки
   const hasClientError = !!errors.name || !!errors.email || !!errors.password;
   const isDisabled = hasClientError || isSubmitting;
 
-  // Для корректной работы register + локального ref комбинируем ref'ы:
   const makeRegisterProps = (name, rules) => {
     const reg = register(name, rules);
-    // reg contains { onChange, onBlur, name, ref } — распакуем ref и остальные
     const { ref, ...rest } = reg;
     return { rest, ref };
   };
@@ -186,14 +177,12 @@ const Register = () => {
                   placeholder={errors.name && !nameValue ? "" : "Имя"}
                   $hasError={!!errors.name}
                 />
-                {/* measure span — скрыт, но нужен для вычисления ширины */}
                 <MeasureSpan ref={nameMeasureRef} aria-hidden />
-                {/* показываем звёздочку когда есть ошибка */}
                 {errors.name && <ErrorStar $left={nameStarLeft}>*</ErrorStar>}
               </InputWrapper>
             </FormGroup>
 
-            {/* EMAIL */}
+            {/* EMAIL (отправляется как login) */}
             <FormGroup>
               <InputWrapper>
                 <Input
@@ -232,7 +221,6 @@ const Register = () => {
               </InputWrapper>
             </FormGroup>
 
-            {/* единое сообщение об ошибке (если нужно) */}
             {hasClientError && (
               <ErrorMessage>
                 Упс! Введенные Вами данные некорректны. Введите данные корректно
@@ -271,7 +259,7 @@ export default Register;
 // import {
 //   RegisterContainer,
 //   RegisterCard,
-//   RegisterTitle, 
+//   RegisterTitle,
 //   RegisterForm,
 //   FormGroup,
 //   Input,

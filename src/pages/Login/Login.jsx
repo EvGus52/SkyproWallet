@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import {
@@ -44,12 +44,24 @@ const Login = () => {
     }
   };
 
-  const hasError = Object.keys(errors).length > 0 || submitError;
-  const isDisabled = hasError;
-
   // следим за значениями
   const loginValue = watch("login");
   const passwordValue = watch("password");
+
+  // если была ошибка сервера — сбрасываем её при изменении любого поля
+  useEffect(() => {
+    if (submitError) {
+      setSubmitError(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loginValue, passwordValue]);
+
+  // hasError — для отображения общего сообщения об ошибке (валидация или сервер)
+  const hasError = Object.keys(errors).length > 0 || submitError;
+
+  // isDisabled не должен включать submitError — иначе кнопка останется выключенной
+  // когда пользователь исправляет данные после серверной ошибки.
+  const isDisabled = Object.keys(errors).length > 0 || isSubmitting;
 
   return (
     <LoginContainer>
