@@ -27,7 +27,7 @@ const Register = () => {
   } = useForm({
     defaultValues: {
       name: "",
-      login: "",
+      email: "",
       password: "",
     },
   });
@@ -36,7 +36,14 @@ const Register = () => {
     setError("");
 
     try {
-      const result = await signUp(data);
+      // Преобразуем email в login для API
+      const apiData = {
+        name: data.name,
+        login: data.email,
+        password: data.password,
+      };
+
+      const result = await signUp(apiData);
 
       // Сохраняем токен и данные пользователя
       setToken(result.user.token);
@@ -92,24 +99,19 @@ const Register = () => {
 
             <FormGroup>
               <Input
-                {...register("login", {
-                  required: "Логин обязателен",
-                  minLength: {
-                    value: 3,
-                    message: "Логин должен содержать минимум 3 символа",
-                  },
+                {...register("email", {
+                  required: "Эл. почта обязательна",
                   pattern: {
-                    value: /^[a-zA-Z0-9_]+$/,
-                    message:
-                      "Логин может содержать только буквы, цифры и подчеркивания",
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Введите корректный адрес эл. почты",
                   },
                 })}
-                type="text"
-                placeholder="Логин"
+                type="email"
+                placeholder="Эл. почта"
               />
-              {errors.login && (
+              {errors.email && (
                 <span style={{ color: "red", fontSize: "12px" }}>
-                  {errors.login.message}
+                  {errors.email.message}
                 </span>
               )}
             </FormGroup>

@@ -67,3 +67,6 @@ export const MainContainer = styled.main`
     padding: 12px;
   }
 `;
+
+
+

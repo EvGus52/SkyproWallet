@@ -115,7 +115,7 @@ const Login = () => {
 
           <RegisterLink>
             <p>Нужно зарегистрироваться?</p>
-            <Link to="/register">Регистрируйтесь здесь</Link>
+            <Link to="/register">Зарегистрируйтесь здесь</Link>
           </RegisterLink>
         </LoginCard>
       </LoginContainer>

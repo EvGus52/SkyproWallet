@@ -6,6 +6,10 @@ export const RegisterContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${THEME.colors.background};
+
+  @media (max-width: 768px) {
+    background-color: ${THEME.colors.white};
+  }
 `;
 
 export const RegisterCard = styled.div`
@@ -18,15 +22,12 @@ export const RegisterCard = styled.div`
   margin: auto;
 
   @media (max-width: 768px) {
-    padding: 32px 24px;
-    margin: 16px;
-    max-width: calc(100% - 32px);
-  }
-
-  @media (max-width: 480px) {
-    padding: 24px 16px;
-    margin: 12px;
-    max-width: calc(100% - 24px);
+    background-color: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 24px 20px;
+    margin: 0;
+    max-width: 100%;
   }
 `;
 
@@ -39,8 +40,11 @@ export const RegisterTitle = styled.h1`
   margin-bottom: 32px;
 
   @media (max-width: 768px) {
-    font-size: ${THEME.fonts.sizes.lg};
-    margin-bottom: 24px;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 40px;
+    margin-top: 60px;
   }
 `;
 
@@ -136,15 +140,18 @@ export const LoginLink = styled.div`
 
   p {
     margin: 0 0 8px 0;
+    font-size: 14px;
+    color: #999999;
   }
 
   a {
     color: #999999;
     text-decoration: underline;
     font-weight: ${THEME.fonts.weights.normal};
+    font-size: 14px;
 
     &:hover {
-      color: ${THEME.colors.gray[600]};
+      color: #666666;
     }
   }
 `;
