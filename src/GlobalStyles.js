@@ -28,7 +28,7 @@ export const FormGridArea = styled.div`
   grid-column: span 4;
 
   @media (max-width: 768px) {
-    grid-column: span 1;
+    display: none; /* Скрываем форму на мобильных устройствах */
   }
 `;
 

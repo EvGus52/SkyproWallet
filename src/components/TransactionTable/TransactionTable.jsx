@@ -30,7 +30,7 @@ const formatAmount = (amount) => {
   );
 };
 
-const TransactionTable = () => {
+const TransactionTable = ({ selectedTransaction, onTransactionSelect }) => {
   const { transactions, loading, error, removeTransaction } = useTransactions();
 
   // Транзакции загружаются в родительском компоненте MyExpenses
@@ -108,7 +108,27 @@ const TransactionTable = () => {
               </TableRow>
             ) : transactions.length > 0 ? (
               transactions.map((transaction) => (
-                <TableRow key={transaction._id}>
+                <TableRow
+                  key={transaction._id}
+                  $isSelected={
+                    selectedTransaction &&
+                    selectedTransaction._id === transaction._id
+                  }
+                  data-selected={
+                    selectedTransaction &&
+                    selectedTransaction._id === transaction._id
+                  }
+                  style={{
+                    backgroundColor:
+                      selectedTransaction &&
+                      selectedTransaction._id === transaction._id
+                        ? "#e9d5ff"
+                        : "transparent",
+                  }}
+                  onClick={() =>
+                    onTransactionSelect && onTransactionSelect(transaction)
+                  }
+                >
                   <DescriptionCell>{transaction.description}</DescriptionCell>
                   <CategoryCell>
                     {getCategoryName(transaction.category)}
@@ -117,9 +137,10 @@ const TransactionTable = () => {
                   <AmountCell>{formatAmount(transaction.sum)}</AmountCell>
                   <DeleteCell>
                     <DeleteButton
-                      onClick={() =>
-                        handleDelete(transaction._id, transaction.description)
-                      }
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(transaction._id, transaction.description);
+                      }}
                     >
                       <DeleteIcon
                         src="/images/icons/deleteBtn.svg"

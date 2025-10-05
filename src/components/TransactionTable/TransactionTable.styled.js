@@ -10,6 +10,9 @@ export const TableWrapper = styled.div`
   flex-direction: column;
 
   @media (max-width: 768px) {
+    background-color: transparent;
+    border-radius: 0;
+    box-shadow: none;
     height: auto;
     min-height: 400px;
     max-height: 600px;
@@ -26,8 +29,7 @@ export const TableTitle = styled.h2`
   opacity: 1;
 
   @media (max-width: 768px) {
-    font-size: ${THEME.fonts.sizes.lg};
-    padding: 16px;
+    display: none; /* Скрываем заголовок на мобильных устройствах */
   }
 `;
 
@@ -105,13 +107,48 @@ export const HeaderCell = styled.th`
 
     &:last-child {
       padding-right: 12px;
+      display: none; /* Скрываем заголовок колонки удаления на мобильных устройствах */
     }
   }
 `;
 
 export const TableBody = styled.tbody``;
 
-export const TableRow = styled.tr``;
+export const TableRow = styled.tr`
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #f8fafc;
+  }
+
+  ${(props) =>
+    props.$isSelected &&
+    `
+    background-color: #e9d5ff !important;
+    
+    &:hover {
+      background-color: #ddd6fe !important;
+    }
+  `}
+
+  @media (max-width: 768px) {
+    &:hover {
+      background-color: transparent;
+    }
+
+    ${(props) =>
+      props.$isSelected &&
+      `
+      background-color: #e9d5ff !important;
+    `}
+
+    /* Дополнительное выделение через data-атрибут для надежности */
+    &[data-selected="true"] {
+      background-color: #e9d5ff !important;
+    }
+  }
+`;
 
 export const TableCell = styled.td`
   padding: 4px 20px;
@@ -160,6 +197,10 @@ export const DeleteCell = styled(TableCell)`
   &:last-child {
     padding-right: 24px;
     text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    display: none; /* Скрываем иконки удаления на мобильных устройствах */
   }
 `;
 

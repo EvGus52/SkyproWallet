@@ -16,6 +16,9 @@ export const ChartWrapper = styled.div`
   }
 
   @media (max-width: 768px) {
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
     width: 100%;
     height: auto;
     min-height: 400px;

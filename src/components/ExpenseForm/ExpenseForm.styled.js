@@ -10,8 +10,10 @@ export const FormWrapper = styled.div`
   flex-direction: column;
 
   @media (max-width: 768px) {
+    background-color: transparent;
+    border-radius: 0;
+    box-shadow: none;
     padding: 16px;
-    border-radius: ${THEME.borderRadius.medium};
   }
 `;
 
@@ -24,8 +26,7 @@ export const FormTitle = styled.h2`
   margin: 0 0 24px 0;
 
   @media (max-width: 768px) {
-    font-size: ${THEME.fonts.sizes.lg};
-    margin: 0 0 16px 0;
+    display: none; /* Скрываем заголовок в мобильной версии */
   }
 `;
 

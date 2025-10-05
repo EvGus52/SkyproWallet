@@ -13,6 +13,10 @@ import {
   AnalyticsContainer,
   AnalyticsTitle,
   AnalyticsContent,
+  SelectPeriodButton,
+  BackButton,
+  BackIcon,
+  BackText,
 } from "./Analytics.styled";
 
 const Analytics = () => {
@@ -21,6 +25,7 @@ const Analytics = () => {
   const [allTransactions, setAllTransactions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showCalendar, setShowCalendar] = useState(false);
 
   const { transactions: contextTransactions } = useTransactions();
 
@@ -29,10 +34,27 @@ const Analytics = () => {
     if (dateSelection.type === "range") {
       setSelectedRange(dateSelection);
       setSelectedDate(null);
+      // На десктопе закрываем календарь автоматически после выбора диапазона
+      if (
+        dateSelection.startDate &&
+        dateSelection.endDate &&
+        window.innerWidth > 768
+      ) {
+        setShowCalendar(false);
+      }
     } else {
       setSelectedDate(dateSelection);
       setSelectedRange(null);
+      // На десктопе закрываем календарь автоматически
+      if (window.innerWidth > 768) {
+        setShowCalendar(false);
+      }
     }
+  };
+
+  // Функция для закрытия календаря и перехода к диаграмме (только для мобильной версии)
+  const handleSelectPeriod = () => {
+    setShowCalendar(false);
   };
 
   // Маппинг категорий API на русские названия
@@ -235,18 +257,35 @@ const Analytics = () => {
       <Header />
       <main className="center">
         <AnalyticsContainer>
-          <AnalyticsTitle>Анализ расходов</AnalyticsTitle>
+          {showCalendar ? (
+            <BackButton onClick={() => setShowCalendar(false)}>
+              <BackIcon>←</BackIcon>
+              <BackText>Анализ расходов</BackText>
+            </BackButton>
+          ) : (
+            <AnalyticsTitle>Анализ расходов</AnalyticsTitle>
+          )}
           <AnalyticsContent>
             <Calendar
               selectedDate={selectedDate}
               onDateSelect={handleDateSelect}
+              onSelectPeriod={handleSelectPeriod}
+              $show={showCalendar}
             />
-            <ExpenseChart
-              data={chartData}
-              totalAmount={totalAmount}
-              dateRange={formatDateRange()}
-            />
+            {!showCalendar && (
+              <ExpenseChart
+                data={chartData}
+                totalAmount={totalAmount}
+                dateRange={formatDateRange()}
+              />
+            )}
           </AnalyticsContent>
+
+          {!showCalendar && (
+            <SelectPeriodButton onClick={() => setShowCalendar(true)}>
+              Выбрать другой период
+            </SelectPeriodButton>
+          )}
         </AnalyticsContainer>
       </main>
     </>

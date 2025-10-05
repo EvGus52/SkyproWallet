@@ -18,6 +18,14 @@ export const CalendarContainer = styled.div`
   max-width: 379px;
 
   @media (max-width: 768px) {
+    display: ${(props) =>
+      props.$show
+        ? "flex"
+        : "none"}; /* Показываем календарь только когда нужно */
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
     width: 100%;
     max-width: 100%;
     height: auto;
@@ -223,5 +231,42 @@ export const CalendarDay = styled.div`
       if (props.$isToday) return "#e2e8f0";
       return "#f1f5f9";
     }};
+  }
+`;
+
+export const SelectPeriodButton = styled.button`
+  background: ${THEME.colors.primary};
+  color: white;
+  border: none;
+  border-radius: ${THEME.borderRadius.medium};
+  padding: 16px 32px;
+  font-family: Montserrat;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 12px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  width: calc(100% - 64px);
+  margin: 24px 32px;
+  display: none; /* Скрываем по умолчанию */
+
+  &:hover {
+    background: ${THEME.colors.primaryDark || "#6b46c1"};
+  }
+
+  @media (max-width: 768px) {
+    display: block; /* Показываем только на мобильных устройствах */
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    width: calc(100% - 40px);
+    margin: 0;
+    padding: 16px 24px;
+    z-index: 10;
   }
 `;

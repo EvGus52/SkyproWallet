@@ -9,9 +9,15 @@ import {
   MonthSection,
   CalendarGrid,
   CalendarDay,
+  SelectPeriodButton,
 } from "./Calendar.styled";
 
-const Calendar = ({ selectedDate, onDateSelect }) => {
+const Calendar = ({
+  selectedDate,
+  onDateSelect,
+  onSelectPeriod,
+  $show = true,
+}) => {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth();
@@ -161,10 +167,10 @@ const Calendar = ({ selectedDate, onDateSelect }) => {
   const weekDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
 
   return (
-    <CalendarContainer>
+    <CalendarContainer $show={$show}>
       <PeriodBlock>
         <CalendarHeader>
-          <h3>Период</h3>
+          <h3>Выбор периода</h3>
         </CalendarHeader>
       </PeriodBlock>
 
@@ -197,6 +203,10 @@ const Calendar = ({ selectedDate, onDateSelect }) => {
           );
         })}
       </MonthSection>
+
+      <SelectPeriodButton onClick={onSelectPeriod}>
+        Выбрать период
+      </SelectPeriodButton>
     </CalendarContainer>
   );
 };
