@@ -1,41 +1,50 @@
 import styled from "styled-components";
 import { THEME } from "../../constants/theme";
 
+/* Обертка таблицы */
 export const TableWrapper = styled.div`
   background-color: ${THEME.colors.white};
   border-radius: ${THEME.borderRadius.large};
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   height: 618px;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
+`;
+
+/* Заголовок таблицы и контейнер фильтров */
+export const TableTitleContainer = styled.div`
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 24px;
 `;
 
 export const TableTitle = styled.h2`
   font-family: ${THEME.fonts.family};
   font-weight: ${THEME.fonts.weights.bold};
   font-size: ${THEME.fonts.sizes.xl};
-  padding: 24px;
   color: ${THEME.colors.gray[700]};
 `;
 
+/* Контейнер фильтров */
 export const FiltersContainer = styled.div`
   display: flex;
-  gap: 16px;
-  padding: 0 24px 16px 24px;
+  gap: 24px;
 `;
 
-export const FilterLabel = styled.label`
+export const FilterGroup = styled.div`
   display: flex;
-  flex-direction: column;
-  font-size: ${THEME.fonts.sizes.xs};
+  align-items: center;
+  gap: 8px;
 `;
 
-export const FilterSelect = styled.select`
-  margin-top: 4px;
-  padding: 6px;
-  font-size: ${THEME.fonts.sizes.xs};
+export const FilterLabel = styled.span`
+  font-size: ${THEME.fonts.sizes.sm};
+  color: ${THEME.colors.black};
+  font-weight: ${THEME.fonts.weights.medium};
 `;
 
+/* Таблица */
 export const TableContainer = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
@@ -46,18 +55,15 @@ export const TableContainer = styled.div`
   &::-webkit-scrollbar {
     width: 6px;
   }
-
   &::-webkit-scrollbar-track {
     background: transparent;
   }
-
   &::-webkit-scrollbar-thumb {
-    background: #d9d9d9;
+    background: ${THEME.colors.gray[300]};
     border-radius: ${THEME.borderRadius.large};
   }
-
   &::-webkit-scrollbar-thumb:hover {
-    background: #b0b0b0;
+    background: ${THEME.colors.gray[400]};
   }
 `;
 
@@ -78,14 +84,13 @@ export const HeaderCell = styled.th`
   text-align: left;
   font-weight: ${THEME.fonts.weights.normal};
   font-size: ${THEME.fonts.sizes.xs};
-  color: #999999;
+  color: ${THEME.colors.gray[400]};
   text-transform: uppercase;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid ${THEME.colors.gray[300]};
 
   &:first-child {
     padding-left: 24px;
   }
-
   &:last-child {
     padding-right: 24px;
     text-align: right;
@@ -103,7 +108,6 @@ export const TableCell = styled.td`
   &:first-child {
     padding-left: 24px;
   }
-
   &:last-child {
     padding-right: 24px;
     text-align: right;
@@ -142,6 +146,43 @@ export const DeleteIcon = styled.img`
   width: 16px;
   height: 16px;
 `;
+
+/* Кнопки фильтров и сортировки */
+export const CategoryButton = styled.button`
+  background: none;
+  border: none;
+  color: ${THEME.colors.primary};
+  cursor: pointer;
+  padding: 0;
+  font-size: ${THEME.fonts.sizes.sm};
+  text-decoration: underline;
+  transition: color 0.25s ease;
+
+  &:hover {
+    color: ${THEME.colors.primaryHover};
+  }
+`;
+
+export const SortSelect = styled.select`
+  background: none;
+  border: none;
+  color: ${THEME.colors.primary};
+  cursor: pointer;
+  padding: 0;
+  font-size: ${THEME.fonts.sizes.sm};
+  text-decoration: underline;
+  transition: color 0.25s ease;
+
+  &:hover {
+    color: ${THEME.colors.primaryHover};
+  }
+
+  &:focus {
+    outline: none;
+    color: ${THEME.colors.primary};
+  }
+`;
+
 
 // import styled from "styled-components";
 // import { THEME } from "../../constants/theme";

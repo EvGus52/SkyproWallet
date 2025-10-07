@@ -53,7 +53,7 @@ const Header = () => {
       <HeaderContent className="center">
         <Logo>
           <Link to="/">
-            <LogoImage src="/images/logo.png" alt="Skypro.Wallet" />
+            <LogoImage src="/images/logo.svg" alt="Skypro.Wallet" />
           </Link>
         </Logo>
 
