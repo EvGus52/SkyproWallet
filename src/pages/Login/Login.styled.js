@@ -16,6 +16,18 @@ export const LoginCard = styled.div`
   width: 100%;
   max-width: 379px;
   margin: auto;
+
+  @media (max-width: 768px) {
+    padding: 32px 24px;
+    margin: 16px;
+    max-width: calc(100% - 32px);
+  }
+
+  @media (max-width: 480px) {
+    padding: 24px 16px;
+    margin: 12px;
+    max-width: calc(100% - 24px);
+  }
 `;
 
 export const LoginTitle = styled.h1`
@@ -25,6 +37,11 @@ export const LoginTitle = styled.h1`
   text-align: center;
   color: ${THEME.colors.gray[700]};
   margin-bottom: 32px;
+
+  @media (max-width: 768px) {
+    font-size: ${THEME.fonts.sizes.lg};
+    margin-bottom: 24px;
+  }
 `;
 
 export const LoginForm = styled.form`
@@ -55,6 +72,7 @@ export const Input = styled.input`
   color: ${THEME.colors.gray[700]};
   width: 100%;
   box-sizing: border-box;
+
 
   &::placeholder {
     color: black;

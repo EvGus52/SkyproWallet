@@ -37,4 +37,10 @@ export const THEME = {
       bold: 700,
     },
   },
+  breakpoints: {
+    mobile: "480px",
+    tablet: "768px",
+    desktop: "1024px",
+    wide: "1440px",
+  },
 };

@@ -8,6 +8,11 @@ export const FormWrapper = styled.div`
   padding: 24px;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+    border-radius: ${THEME.borderRadius.medium};
+  }
 `;
 
 export const FormTitle = styled.h2`
@@ -16,6 +21,11 @@ export const FormTitle = styled.h2`
   font-size: ${THEME.fonts.sizes.xl};
   color: ${THEME.colors.gray[700]};
   margin-bottom: 24px;
+
+  @media (max-width: 768px) {
+    font-size: ${THEME.fonts.sizes.lg};
+    margin: 0 0 16px 0;
+  }
 `;
 
 export const Form = styled.form`
@@ -67,13 +77,25 @@ export const Input = styled.input`
   &::placeholder {
     color: ${THEME.colors.gray[400]};
   }
+
+  @media (max-width: 768px) {
+    padding: 10px;
+    font-size: ${THEME.fonts.sizes.sm};
+  }
 `;
 
 export const CategoriesContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+
   margin-top: 8px;
+  width: 313px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    gap: 6px;
+  }
 `;
 
 export const CategoryButton = styled.button`
@@ -93,6 +115,12 @@ export const CategoryButton = styled.button`
     background-color: ${(props) => (props.$selected ? "#F1EBFD" : "#f0f0f0")};
     border-color: ${(props) =>
       props.$selected ? THEME.colors.primary : "#ccc"};
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px 16px;
+    font-size: 11px;
+    gap: 6px;
   }
 `;
 

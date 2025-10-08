@@ -9,6 +9,12 @@ export const TableWrapper = styled.div`
   height: 618px;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 768px) {
+    height: auto;
+    min-height: 400px;
+    max-height: 600px;
+  }
 `;
 
 /* Заголовок таблицы и контейнер фильтров */
@@ -24,6 +30,12 @@ export const TableTitle = styled.h2`
   font-weight: ${THEME.fonts.weights.bold};
   font-size: ${THEME.fonts.sizes.xl};
   color: ${THEME.colors.gray[700]};
+  opacity: 1;
+
+  @media (max-width: 768px) {
+    font-size: ${THEME.fonts.sizes.lg};
+    padding: 16px;
+  }
 `;
 
 /* Контейнер фильтров */
@@ -71,6 +83,10 @@ export const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
   font-family: ${THEME.fonts.family};
+
+  @media (max-width: 768px) {
+    font-size: ${THEME.fonts.sizes.xs};
+  }
 `;
 
 export const TableHeader = styled.thead`
@@ -95,6 +111,19 @@ export const HeaderCell = styled.th`
     padding-right: 24px;
     text-align: right;
   }
+
+  @media (max-width: 768px) {
+    padding: 12px 8px;
+    font-size: 10px;
+
+    &:first-child {
+      padding-left: 12px;
+    }
+
+    &:last-child {
+      padding-right: 12px;
+    }
+  }
 `;
 
 export const TableBody = styled.tbody``;
@@ -111,6 +140,19 @@ export const TableCell = styled.td`
   &:last-child {
     padding-right: 24px;
     text-align: right;
+  }
+
+  @media (max-width: 768px) {
+    padding: 6px 8px;
+    font-size: 11px;
+
+    &:first-child {
+      padding-left: 12px;
+    }
+
+    &:last-child {
+      padding-right: 12px;
+    }
   }
 `;
 
@@ -180,6 +222,7 @@ export const SortSelect = styled.select`
   &:focus {
     outline: none;
     color: ${THEME.colors.primary};
+
   }
 `;
 
