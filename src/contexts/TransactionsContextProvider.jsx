@@ -76,7 +76,7 @@ export const TransactionsProvider = ({ children }) => {
     }
 
     const token = getToken();
-    setLoading(true);
+    setLoading(true); 
     setError(null);
 
     try {
