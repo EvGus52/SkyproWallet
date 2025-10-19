@@ -162,7 +162,7 @@ const Register = () => {
             >
               {serverError}
             </div>
-          )}
+          )}   
 
           <RegisterForm onSubmit={handleSubmit(onSubmit)}>
             {/* NAME */}

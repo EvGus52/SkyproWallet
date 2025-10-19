@@ -25,7 +25,7 @@ const MyExpenses = () => {
   useEffect(() => {
     if (error) {
       appToasts.generalError(error);
-    }
+    }  
   }, [error]);
 
   const handleExpenseSubmit = async (expenseData) => {
