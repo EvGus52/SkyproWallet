@@ -29,7 +29,7 @@ export const FormTitle = styled.h2`
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 22px;
 `;
 
 export const FormGroup = styled.div`
@@ -52,7 +52,6 @@ export const Label = styled.label`
       color: #f25050;
     }
   `}
-
 `;
 
 export const Input = styled.input`
@@ -76,7 +75,6 @@ export const Input = styled.input`
   &.error {
     background-color: #ffebeb;
     border: 1px solid #f25050;
-
   }
 
   &::placeholder {
@@ -114,12 +112,29 @@ export const CategoryButton = styled.button`
     props.$selected ? "#F1EBFD" : THEME.colors.background};
   color: ${(props) =>
     props.$selected ? THEME.colors.primary : THEME.colors.black};
+  font-family: ${THEME.fonts.family};
+  font-size: ${THEME.fonts.sizes.xs};
+  font-weight: ${THEME.fonts.weights.normal};
   cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
 
   &:hover {
     background-color: ${(props) => (props.$selected ? "#F1EBFD" : "#f0f0f0")};
     border-color: ${(props) =>
-      props.$selected ? THEME.colors.primary : "#ccc"};
+      props.$selected ? THEME.colors.primary : THEME.colors.gray[300]};
+    color: ${THEME.colors.primary};
+
+    img {
+      filter: brightness(0) saturate(100%) invert(25%) sepia(95%)
+        saturate(7500%) hue-rotate(266deg) brightness(95%) contrast(101%);
+    }
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(115, 52, 234, 0.2);
   }
 
   @media (max-width: 767px) {
@@ -132,14 +147,20 @@ export const CategoryButton = styled.button`
 export const CategoryIcon = styled.img`
   width: 16px;
   height: 16px;
+  filter: ${(props) =>
+    props.$selected
+      ? "brightness(0) saturate(100%) invert(25%) sepia(95%) saturate(7500%) hue-rotate(266deg) brightness(95%) contrast(101%)"
+      : "none"};
+  transition: filter 0.2s ease;
 `;
 
 export const PrimaryButton = styled.button`
   width: 100%;
   padding: 14px;
   font-family: ${THEME.fonts.family};
-  font-size: ${THEME.fonts.sizes.base};
-  font-weight: ${THEME.fonts.weights.semibold};
+  font-size: 12px;
+  font-weight: 600;
+  font-style: normal;
   border: none;
   border-radius: ${THEME.borderRadius.small};
   background-color: ${(props) =>
@@ -151,10 +172,6 @@ export const PrimaryButton = styled.button`
   &:hover:not(:disabled) {
     background-color: ${THEME.colors.primaryHover};
   }
-`;
-
-// import styled from "styled-components";
-// import { THEME } from "../../constants/theme";
 
   &:disabled {
     background-color: #999999;

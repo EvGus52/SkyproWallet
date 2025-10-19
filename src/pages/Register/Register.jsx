@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Header from "../../components/Header/Header";
@@ -20,7 +20,7 @@ import {
 
 const Register = () => {
   const navigate = useNavigate();
-  const [serverError, setServerError] = useState("");
+  const [error, setError] = useState("");
 
   const {
     register,
@@ -63,74 +63,20 @@ const Register = () => {
   const onSubmit = async (data) => {
     setError("");
 
-  useEffect(() => {
-    updateStar(emailInputRef, emailMeasureRef, setEmailStarLeft);
-  }, [emailValue, errors.email]);
-
-  useEffect(() => {
-    updateStar(passwordInputRef, passwordMeasureRef, setPasswordStarLeft);
-  }, [passwordValue, errors.password]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      updateStar(nameInputRef, nameMeasureRef, setNameStarLeft);
-      updateStar(emailInputRef, emailMeasureRef, setEmailStarLeft);
-      updateStar(passwordInputRef, passwordMeasureRef, setPasswordStarLeft);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const onSubmit = async (data) => {
-    setServerError("");
     try {
-      // Маппим email → login для API
-      const payload = {
-        name: data.name,
-        login: data.email,
-        password: data.password,
-      };
+      const result = await signUp(data);
 
-      const result = await signUp(payload);
+      // Сохраняем токен и данные пользователя
       setToken(result.user.token);
       setUserData(result.user);
+
+      // Перенаправляем на главную страницу
       navigate("/");
     } catch (err) {
+      setError(err.message);
       console.error("Ошибка регистрации:", err);
-      setServerError(err?.message || "Ошибка сервера");
     }
   };
-
-  const hasClientError = !!errors.name || !!errors.email || !!errors.password;
-  const isDisabled = hasClientError || isSubmitting;
-
-  const makeRegisterProps = (name, rules) => {
-    const reg = register(name, rules);
-    const { ref, ...rest } = reg;
-    return { rest, ref };
-  };
-
-  const nameReg = makeRegisterProps("name", {
-    required: "Имя обязательно",
-    minLength: { value: 2, message: "Имя должно содержать минимум 2 символа" },
-    pattern: { value: /^[^\d]+$/, message: "Имя не должно содержать цифры" },
-  });
-
-  const emailReg = makeRegisterProps("email", {
-    required: "Email обязателен",
-    pattern: {
-      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-      message: "Неверный формат email",
-    },
-  });
-
-  const passwordReg = makeRegisterProps("password", {
-    required: "Пароль обязателен",
-    minLength: {
-      value: 6,
-      message: "Пароль должен содержать минимум 6 символов",
-    },
-  });
 
   return (
     <>
@@ -140,17 +86,19 @@ const Register = () => {
 
         <RegisterCard>
           <RegisterTitle>Регистрация</RegisterTitle>
-
-          {serverError && (
+          {error && (
             <div
-              style={{ color: "red", marginBottom: 12, textAlign: "center" }}
+              style={{
+                color: "red",
+                marginBottom: "16px",
+                textAlign: "center",
+                fontSize: "14px",
+              }}
             >
-              {serverError}
+              {error}
             </div>
-          )}   
-
+          )}
           <RegisterForm onSubmit={handleSubmit(onSubmit)}>
-            {/* NAME */}
             <FormGroup>
               <InputWrapper $hasError={hasFieldError("name")}>
                 <Input
@@ -168,7 +116,6 @@ const Register = () => {
               </InputWrapper>
             </FormGroup>
 
-            {/* EMAIL (отправляется как login) */}
             <FormGroup>
               <InputWrapper $hasError={hasFieldError("login")}>
                 <Input
@@ -186,7 +133,6 @@ const Register = () => {
               </InputWrapper>
             </FormGroup>
 
-            {/* PASSWORD */}
             <FormGroup>
               <InputWrapper $hasError={hasFieldError("password")}>
                 <Input
@@ -213,7 +159,6 @@ const Register = () => {
             <RegisterButton
               type="submit"
               disabled={isSubmitting || hasValidationErrors}
-
             >
               {isSubmitting ? "Регистрация..." : "Зарегистрироваться"}
             </RegisterButton>
@@ -230,155 +175,3 @@ const Register = () => {
 };
 
 export default Register;
-
-// import { useState } from "react";
-// import { Link, useNavigate } from "react-router-dom";
-// import { useForm } from "react-hook-form";
-// import Header from "../../components/Header/Header";
-// import GlobalStyles from "../../GlobalStyles";
-// import { signUp } from "../../services/Auth";
-// import { setToken, setUserData } from "../../utils/tokenUtils";
-// import {
-//   RegisterContainer,
-//   RegisterCard,
-//   RegisterTitle,
-//   RegisterForm,
-//   FormGroup,
-//   Input,
-//   RegisterButton,
-//   LoginLink,
-// } from "./Register.styled";
-
-// const Register = () => {
-//   const navigate = useNavigate();
-//   const [error, setError] = useState("");
-
-//   const {
-//     register,
-//     handleSubmit,
-//     formState: { errors, isSubmitting },
-//   } = useForm({
-//     defaultValues: {
-//       name: "",
-//       login: "",
-//       password: "",
-//     },
-//   });
-
-//   const onSubmit = async (data) => {
-//     setError("");
-
-//     try {
-//       const result = await signUp(data);
-
-//       // Сохраняем токен и данные пользователя
-//       setToken(result.user.token);
-//       setUserData(result.user);
-
-//       // Перенаправляем на главную страницу
-//       navigate("/");
-//     } catch (err) {
-//       setError(err.message);
-//       console.error("Ошибка регистрации:", err);
-//     }
-//   };
-
-//   return (
-//     <>
-//       <GlobalStyles />
-//       <RegisterContainer>
-//         <Header />
-
-//         <RegisterCard>
-//           <RegisterTitle>Регистрация</RegisterTitle>
-//           {error && (
-//             <div
-//               style={{
-//                 color: "red",
-//                 marginBottom: "16px",
-//                 textAlign: "center",
-//                 fontSize: "14px",
-//               }}
-//             >
-//               {error}
-//             </div>
-//           )}
-//           <RegisterForm onSubmit={handleSubmit(onSubmit)}>
-//             <FormGroup>
-//               <Input
-//                 {...register("name", {
-//                   required: "Имя обязательно",
-//                   minLength: {
-//                     value: 2,
-//                     message: "Имя должно содержать минимум 2 символа",
-//                   },
-//                 })}
-//                 type="text"
-//                 placeholder="Имя"
-//               />
-//               {errors.name && (
-//                 <span style={{ color: "red", fontSize: "12px" }}>
-//                   {errors.name.message}
-//                 </span>
-//               )}
-//             </FormGroup>
-
-//             <FormGroup>
-//               <Input
-//                 {...register("login", {
-//                   required: "Логин обязателен",
-//                   minLength: {
-//                     value: 3,
-//                     message: "Логин должен содержать минимум 3 символа",
-//                   },
-//                   pattern: {
-//                     value: /^[a-zA-Z0-9_]+$/,
-//                     message:
-//                       "Логин может содержать только буквы, цифры и подчеркивания",
-//                   },
-//                 })}
-//                 type="text"
-//                 placeholder="Логин"
-//               />
-//               {errors.login && (
-//                 <span style={{ color: "red", fontSize: "12px" }}>
-//                   {errors.login.message}
-//                 </span>
-//               )}
-//             </FormGroup>
-
-//             <FormGroup>
-//               <Input
-//                 {...register("password", {
-//                   required: "Пароль обязателен",
-//                   minLength: {
-//                     value: 6,
-//                     message: "Пароль должен содержать минимум 6 символов",
-//                   },
-//                 })}
-//                 type="password"
-//                 placeholder="Пароль"
-//               />
-//               {errors.password && (
-//                 <span style={{ color: "red", fontSize: "12px" }}>
-//                   {errors.password.message}
-//                 </span>
-//               )}
-//             </FormGroup>
-
-//             <RegisterButton type="submit" disabled={isSubmitting}>
-//               {isSubmitting ? "Регистрация..." : "Зарегистрироваться"}
-//             </RegisterButton>
-//           </RegisterForm>
-
-//           <LoginLink>
-//             <p>Уже есть аккаунт?</p>
-//             <Link to="/login">Войдите здесь</Link>
-//           </LoginLink>
-//         </RegisterCard>
-//       </RegisterContainer>
-//     </>
-//   );
-// };
-
-// export default Register;

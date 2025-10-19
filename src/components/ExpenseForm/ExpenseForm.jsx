@@ -10,23 +10,20 @@ import {
   CategoryButton,
   CategoryIcon,
   PrimaryButton,
-  ErrorStar,
 } from "./ExpenseForm.styled";
 
-const ExpenseForm = ({ onSubmit, onCancel, isFormSubmitting = false }) => {
+const ExpenseForm = ({ onSubmit, isFormSubmitting = false }) => {
   const { register, handleSubmit, setValue, watch, reset, formState } = useForm(
     {
-      mode: "onChange", // Валидация при изменении
-
+      mode: "onChange",
       defaultValues: {
         description: "",
         category: "",
         date: "",
         amount: "",
       },
-      mode: "onChange",
-      reValidateMode: "onChange", // обновляет валидацию при каждом изменении
-    });
+    }
+  );
 
   const categories = [
     { name: "Еда", value: "food", icon: "/images/icons/category1.svg" },
@@ -52,7 +49,6 @@ const ExpenseForm = ({ onSubmit, onCancel, isFormSubmitting = false }) => {
 
   const handleCategorySelect = (categoryValue) => {
     setValue("category", categoryValue, { shouldValidate: true });
-    trigger("category");
   };
 
   // Функция для проверки валидности поля
@@ -73,38 +69,37 @@ const ExpenseForm = ({ onSubmit, onCancel, isFormSubmitting = false }) => {
   };
 
   const onFormSubmit = (data) => {
-    const amount = parseFloat(data.amount);
-    const date = new Date(data.date);
+    // Подготовка данных для отправки в формате API
+    const expenseData = {
+      description: data.description.trim(),
+      category: data.category,
+      date: formatDateForAPI(data.date),
+      sum: parseFloat(data.amount),
+    };
 
-    if (!isNaN(amount) && !isNaN(date.getTime()) && selectedCategory) {
-      const expenseData = {
-        description: data.description.trim(),
-        category: data.category,
-        date: data.date,
-        sum: amount,
-      };
+    onSubmit?.(expenseData);
+    reset(); // Автоматическая очистка формы
+  };
 
-      onSubmit?.(expenseData);
-
-      // Сбрасываем форму и валидацию
-      reset();
-    }
+  // Функция для форматирования даты в формат API (M-D-YYYY)
+  const formatDateForAPI = (dateString) => {
+    const date = new Date(dateString);
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const year = date.getFullYear();
+    return `${month}-${day}-${year}`;
   };
 
   return (
     <FormWrapper>
       <FormTitle>Новый расход</FormTitle>
       <Form onSubmit={handleSubmit(onFormSubmit)}>
-        {/* Описание */}
         <FormGroup>
           <Label htmlFor="description" $hasError={hasFieldError("description")}>
             Описание
           </Label>
           <Input
             id="description"
-            type="text"
-            placeholder="Введите описание"
-            $hasError={!!formState.errors.description}
             {...register("description", {
               required: "Введите описание",
               minLength: {
@@ -123,38 +118,51 @@ const ExpenseForm = ({ onSubmit, onCancel, isFormSubmitting = false }) => {
           )}
         </FormGroup>
 
-        {/* Категория */}
         <FormGroup>
           <Label $hasError={hasFieldError("category")}>Категория</Label>
+          <CategoriesContainer>
+            {categories.map((category) => (
+              <CategoryButton
+                key={category.value}
+                type="button"
+                $selected={selectedCategory === category.value}
+                onClick={() => handleCategorySelect(category.value)}
+              >
+                <CategoryIcon
+                  src={category.icon}
+                  alt={category.name}
+                  $selected={selectedCategory === category.value}
+                />
+                {category.name}
+              </CategoryButton>
+            ))}
+          </CategoriesContainer>
+          {/* Скрытое поле для валидации категории */}
+          <input
+            {...register("category", {
+              required: "Выберите категорию",
+            })}
+            type="hidden"
+          />
+          {formState.errors.category && (
+            <span style={{ color: "red", fontSize: "12px" }}>
+              {formState.errors.category.message}
+            </span>
+          )}
+        </FormGroup>
+
+        <FormGroup>
           <Label htmlFor="date" $hasError={hasFieldError("date")}>
             Дата
           </Label>
           <Input
-            type="date"
-            placeholder="Введите дату"
-            $hasError={!!formState.errors.date}
+            id="date"
             {...register("date", {
-              required: "Введите дату",
-              validate: (value) => {
-                if (!value) return "Введите дату";
-                const pattern = /^(\d{4})-(\d{2})-(\d{2})$/;
-                if (!pattern.test(value)) {
-                  return "Неверный формат даты (ГГГГ-ММ-ДД)";
-                }
-                const [, y, m, d] = value.match(pattern);
-                const year = parseInt(y, 10);
-                const month = parseInt(m, 10);
-                const day = parseInt(d, 10);
-                if (month < 1 || month > 12) return "Неверный месяц";
-                if (day < 1 || day > 31) return "Неверный день";
-                if (year < 1900 || year > 2100) return "Несуществующий год";
-                return true;
-              },
+              required: "Выберите дату",
             })}
             type="date"
             placeholder="Выберите дату"
             className={getFieldClass("date", dateValue)}
-
           />
           {formState.errors.date && (
             <span style={{ color: "red", fontSize: "12px" }}>
@@ -163,35 +171,23 @@ const ExpenseForm = ({ onSubmit, onCancel, isFormSubmitting = false }) => {
           )}
         </FormGroup>
 
-        {/* Сумма */}
         <FormGroup>
           <Label htmlFor="amount" $hasError={hasFieldError("amount")}>
             Сумма
-
           </Label>
           <Input
-            type="text"
-            placeholder="Введите сумму"
-            $hasError={!!formState.errors.amount}
+            id="amount"
             {...register("amount", {
               required: "Введите сумму",
-              validate: (value) => {
-                if (!value) return "Введите сумму";
-
-                // Проверка: только число
-                if (!/^\d+([.,]\d+)?$/.test(value.trim())) {
-                  return "Введите только число без букв";
-                }
-
-                const num = parseFloat(value.replace(",", "."));
-                if (isNaN(num)) return "Некорректная сумма";
-                if (num <= 0) return "Сумма должна быть больше 0";
-                if (num > 1_000_000_000) return "Слишком большая сумма";
-
-                return true;
+              min: {
+                value: 0.01,
+                message: "Сумма должна быть больше 0",
+              },
+              pattern: {
+                value: /^\d+(\.\d{1,2})?$/,
+                message: "Введите корректную сумму",
               },
             })}
-
             type="number"
             placeholder="Введите сумму"
             min="0.01"
@@ -205,7 +201,6 @@ const ExpenseForm = ({ onSubmit, onCancel, isFormSubmitting = false }) => {
           )}
         </FormGroup>
 
-        {/* Кнопка */}
         <PrimaryButton
           type="submit"
           disabled={
@@ -213,9 +208,10 @@ const ExpenseForm = ({ onSubmit, onCancel, isFormSubmitting = false }) => {
             formState.isSubmitting ||
             Object.keys(formState.errors).length > 0
           }
-
         >
-          {isFormSubmitting ? "Добавление..." : "Добавить новый расход"}
+          {isFormSubmitting || formState.isSubmitting
+            ? "Добавление..."
+            : "Добавить новый расход"}
         </PrimaryButton>
       </Form>
     </FormWrapper>

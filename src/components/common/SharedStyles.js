@@ -113,3 +113,67 @@ export const PageTitle = styled.h1`
     grid-column: span 4;
   }
 `;
+
+// Контейнер для центрированных страниц (404, Logout, etc)
+export const CenteredContainer = styled.div`
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${THEME.colors.background};
+`;
+
+// Группа кнопок
+export const ButtonGroup = styled.div`
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+`;
+
+// Вторичная кнопка (отмена, назад)
+export const SecondaryButton = styled.button`
+  font-family: ${THEME.fonts.family};
+  font-size: ${THEME.fonts.sizes.base};
+  font-weight: ${THEME.fonts.weights.semibold};
+  padding: 12px 24px;
+  border: 1px solid ${THEME.colors.gray[300]};
+  border-radius: ${THEME.borderRadius.small};
+  background-color: ${THEME.colors.white};
+  color: ${THEME.colors.gray[600]};
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(156, 163, 175, 0.3);
+  }
+`;
+
+// Опасная кнопка (удаление, выход)
+export const DangerButton = styled.button`
+  font-family: ${THEME.fonts.family};
+  font-size: ${THEME.fonts.sizes.base};
+  font-weight: ${THEME.fonts.weights.semibold};
+  padding: 12px 24px;
+  border: none;
+  border-radius: ${THEME.borderRadius.small};
+  background-color: #ef4444;
+  color: ${THEME.colors.white};
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #dc2626;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3);
+  }
+`;
