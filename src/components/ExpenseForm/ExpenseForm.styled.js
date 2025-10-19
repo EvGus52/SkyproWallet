@@ -17,10 +17,9 @@ export const FormWrapper = styled(Card)`
 export const FormTitle = styled.h2`
   font-family: ${THEME.fonts.family};
   font-weight: ${THEME.fonts.weights.bold};
-  font-style: normal;
   font-size: ${THEME.fonts.sizes.xl};
   color: ${THEME.colors.gray[700]};
-  margin: 0 0 24px 0;
+  margin-bottom: 24px;
 
   @media (max-width: 767px) {
     display: none; /* Скрываем заголовок формы в мобильной версии */
@@ -31,7 +30,6 @@ export const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  flex: 1;
 `;
 
 export const FormGroup = styled.div`
@@ -54,21 +52,23 @@ export const Label = styled.label`
       color: #f25050;
     }
   `}
+
 `;
 
 export const Input = styled.input`
   font-family: ${THEME.fonts.family};
   font-size: ${THEME.fonts.sizes.base};
   padding: 12px;
-  border: 1px solid ${THEME.colors.gray[300]};
+  border: 1px solid
+    ${(props) => (props.$hasError ? "#F25050" : THEME.colors.gray[300])};
   border-radius: ${THEME.borderRadius.small};
-  background-color: ${THEME.colors.white};
-  color: #1f2937;
+  background-color: ${(props) =>
+    props.$hasError ? "#FFEBEB" : THEME.colors.white};
   transition: all 0.2s ease;
 
-  &:focus,
-  &.valid {
+  &:focus {
     outline: none;
+
     background-color: #f1ebfd;
     border: 1px solid ${THEME.colors.primary};
   }
@@ -76,13 +76,10 @@ export const Input = styled.input`
   &.error {
     background-color: #ffebeb;
     border: 1px solid #f25050;
+
   }
 
   &::placeholder {
-    font-family: ${THEME.fonts.family};
-    font-weight: ${THEME.fonts.weights.normal};
-    font-style: normal;
-    font-size: ${THEME.fonts.sizes.xs};
     color: ${THEME.colors.gray[400]};
   }
 
@@ -96,7 +93,8 @@ export const CategoriesContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 12px;
+
+  margin-top: 8px;
   width: 313px;
 
   @media (max-width: 767px) {
@@ -109,31 +107,19 @@ export const CategoryButton = styled.button`
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 24px;
+  padding: 8px 16px;
   border: 1px solid #e5e7eb;
   border-radius: ${THEME.borderRadius.large};
   background-color: ${(props) =>
     props.$selected ? "#F1EBFD" : THEME.colors.background};
   color: ${(props) =>
     props.$selected ? THEME.colors.primary : THEME.colors.black};
-  font-family: ${THEME.fonts.family};
-  font-size: ${THEME.fonts.sizes.xs};
-  font-weight: ${THEME.fonts.weights.normal};
   cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-  flex-shrink: 0;
 
   &:hover {
-    background-color: ${(props) =>
-      props.$selected ? "#F1EBFD" : THEME.colors.gray[200]};
+    background-color: ${(props) => (props.$selected ? "#F1EBFD" : "#f0f0f0")};
     border-color: ${(props) =>
-      props.$selected ? THEME.colors.primary : THEME.colors.gray[300]};
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(115, 52, 234, 0.2);
+      props.$selected ? THEME.colors.primary : "#ccc"};
   }
 
   @media (max-width: 767px) {
@@ -146,36 +132,29 @@ export const CategoryButton = styled.button`
 export const CategoryIcon = styled.img`
   width: 16px;
   height: 16px;
-  filter: ${(props) =>
-    props.$selected
-      ? "brightness(0) saturate(100%) invert(25%) sepia(95%) saturate(7500%) hue-rotate(266deg) brightness(95%) contrast(101%)"
-      : "none"};
-  transition: filter 0.2s ease;
 `;
 
 export const PrimaryButton = styled.button`
   width: 100%;
+  padding: 14px;
   font-family: ${THEME.fonts.family};
+  font-size: ${THEME.fonts.sizes.base};
   font-weight: ${THEME.fonts.weights.semibold};
-  font-style: normal;
-  font-size: ${THEME.fonts.sizes.xs};
-  padding: 16px;
   border: none;
   border-radius: ${THEME.borderRadius.small};
-  background-color: ${THEME.colors.primary};
-  color: ${THEME.colors.white};
-  cursor: pointer;
+  background-color: ${(props) =>
+    props.disabled ? "#ccc" : THEME.colors.primary};
+  color: ${(props) => (props.disabled ? "#666" : THEME.colors.white)};
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
   transition: all 0.2s ease;
-  margin-top: 8px;
 
   &:hover:not(:disabled) {
     background-color: ${THEME.colors.primaryHover};
   }
+`;
 
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(115, 52, 234, 0.3);
-  }
+// import styled from "styled-components";
+// import { THEME } from "../../constants/theme";
 
   &:disabled {
     background-color: #999999;

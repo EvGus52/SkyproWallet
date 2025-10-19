@@ -113,6 +113,7 @@ const Header = () => {
               $isMobile={isMobileLogoPage}
             />
           </button>
+
         </Logo>
 
         {!isAuthPage && (

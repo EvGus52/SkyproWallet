@@ -76,6 +76,7 @@ export const InputWrapper = styled.div`
     font-weight: 600;
     pointer-events: none;
   }
+
 `;
 
 export const Input = styled.input`
@@ -83,34 +84,47 @@ export const Input = styled.input`
   font-family: ${THEME.fonts.family};
   font-size: ${THEME.fonts.sizes.base};
   padding: 12px 16px;
-  border: 1px solid ${THEME.colors.gray[300]};
+  border: 1px solid
+    ${(props) => (props.$hasError ? "#F25050" : THEME.colors.gray[300])};
   border-radius: ${THEME.borderRadius.small};
-  background-color: ${THEME.colors.white};
+  background-color: ${(props) =>
+    props.$hasError ? "#FFEBEB" : THEME.colors.white};
   color: ${THEME.colors.gray[700]};
   transition: all 0.2s ease;
 
-  &::placeholder {
-    font-family: ${THEME.fonts.family};
-    font-weight: ${THEME.fonts.weights.normal};
-    font-style: normal;
-    font-size: ${THEME.fonts.sizes.xs};
-    color: ${THEME.colors.gray[400]};
-  }
 
-  &:not(:placeholder-shown) {
-    color: ${THEME.colors.gray[700]};
-    font-weight: ${THEME.fonts.weights.medium};
+
+  &::placeholder {
+    color: black;
+    font-weight: normal;
   }
 
   &:focus {
     outline: none;
-    border-color: ${THEME.colors.primary};
+    border-color: ${(props) =>
+      props.$hasError ? "#F25050" : THEME.colors.primary};
     box-shadow: 0 0 0 3px rgba(115, 52, 234, 0.1);
-    color: ${THEME.colors.gray[700]};
   }
+`;
 
-  &:focus::placeholder {
-    color: ${THEME.colors.gray[400]};
+/* слой для текста placeholder с возможностью добавить звездочку */
+export const PlaceholderWithStar = styled.span`
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  font-size: ${THEME.fonts.sizes.base};
+  font-family: ${THEME.fonts.family};
+  color: ${(props) => (props.$hasError ? "black" : THEME.colors.gray[400])};
+  pointer-events: none;
+  display: ${(props) => (props.$visible ? "flex" : "none")};
+  align-items: center;
+
+  span {
+    margin-left: 2px;
+    color: red;
+    font-weight: bold;
+    display: ${(props) => (props.$hasError ? "inline" : "none")};
   }
 
   &.valid {
@@ -136,21 +150,27 @@ export const Input = styled.input`
   }
 `;
 
+export const ErrorMessage = styled.div`
+  color: red;
+  font-size: ${THEME.fonts.sizes.xs};
+  margin-top: 4px;
+  text-align: center;
+`;
+
 export const LoginButton = styled.button`
   width: 100%;
   font-family: ${THEME.fonts.family};
   font-weight: ${THEME.fonts.weights.semibold};
-  font-style: normal;
-  font-size: ${THEME.fonts.sizes.xs};
+  font-size: ${THEME.fonts.sizes.sm};
   text-align: center;
   padding: 12px;
   border: none;
   border-radius: ${THEME.borderRadius.small};
-  background-color: ${THEME.colors.primary};
-  color: ${THEME.colors.white};
-  cursor: pointer;
+  background-color: ${(props) =>
+    props.$disabled ? "#ccc" : THEME.colors.primary};
+  color: ${(props) => (props.$disabled ? "#666" : THEME.colors.white)};
+  cursor: ${(props) => (props.$disabled ? "not-allowed" : "pointer")};
   transition: background-color 0.2s ease;
-  margin-top: 8px;
 
   &:hover:not(:disabled) {
     background-color: ${THEME.colors.primaryHover};
@@ -159,6 +179,7 @@ export const LoginButton = styled.button`
   &:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(115, 52, 234, 0.3);
+
   }
 
   &:disabled {

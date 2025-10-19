@@ -1,10 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import Header from "../../components/Header/Header";
-import GlobalStyles from "../../GlobalStyles";
-import { signIn } from "../../services/Auth";
-import { setToken, setUserData } from "../../utils/tokenUtils";
 import {
   LoginContainer,
   LoginCard,
@@ -15,24 +11,26 @@ import {
   Input,
   ErrorMessage,
   LoginButton,
-  RegisterLink,
+  RegisterLink
 } from "./Login.styled";
+import { signIn } from "../../services/Auth";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [error, setError] = useState("");
+  const [submitError, setSubmitError] = useState(false);
 
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors, isSubmitting },
+
   } = useForm({
     mode: "onChange",
     defaultValues: {
       login: "",
-      password: "",
-    },
+      password: ""
+    }
   });
 
   const loginValue = watch("login");
@@ -59,29 +57,40 @@ const Login = () => {
   const hasValidationErrors = Object.keys(errors).length > 0;
 
   const onSubmit = async (data) => {
-    setError("");
-
+    setSubmitError(false);
     try {
       const result = await signIn(data);
-
-      // Сохраняем токен и данные пользователя
-      setToken(result.user.token);
-      setUserData(result.user);
-
-      // Перенаправляем на главную страницу
+      localStorage.setItem("token", result.user.token);
       navigate("/");
     } catch (err) {
-      setError(err.message);
       console.error("Ошибка входа:", err);
+      setSubmitError(true);
     }
   };
 
-  return (
-    <>
-      <GlobalStyles />
-      <LoginContainer>
-        <Header />
+  // следим за значениями
+  const loginValue = watch("login");
+  const passwordValue = watch("password");
 
+  // если была ошибка сервера — сбрасываем её при изменении любого поля
+  useEffect(() => {
+    if (submitError) {
+      setSubmitError(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loginValue, passwordValue]);
+
+  // hasError — для отображения общего сообщения об ошибке (валидация или сервер)
+  const hasError = Object.keys(errors).length > 0 || submitError;
+
+  // isDisabled не должен включать submitError — иначе кнопка останется выключенной
+  // когда пользователь исправляет данные после серверной ошибки.
+  const isDisabled = Object.keys(errors).length > 0 || isSubmitting;
+
+  return (
+    <LoginContainer>
+      <LoginCard>
+        <LoginTitle>Вход</LoginTitle>
         <LoginCard>
           <LoginTitle>Вход</LoginTitle>
           {error && (
@@ -147,13 +156,13 @@ const Login = () => {
             </LoginButton>
           </LoginForm>
 
-          <RegisterLink>
-            <p>Нужно зарегистрироваться?</p>
-            <Link to="/register">Регистрируйтесь здесь</Link>
-          </RegisterLink>
-        </LoginCard>
-      </LoginContainer>
-    </>
+
+        <RegisterLink>
+          <p>Нужно зарегистрироваться?</p>
+          <Link to="/register">Регистрируйтесь здесь</Link>
+        </RegisterLink>
+      </LoginCard>
+    </LoginContainer>
   );
 };
 
