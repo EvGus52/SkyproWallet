@@ -1,15 +1,13 @@
 import styled from "styled-components";
 import { THEME } from "../../constants/theme";
+import { Card } from "../common/SharedStyles";
 
-export const TableWrapper = styled.div`
-  background-color: ${THEME.colors.white};
-  border-radius: ${THEME.borderRadius.large};
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+export const TableWrapper = styled(Card)`
   height: 618px;
   display: flex;
   flex-direction: column;
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     height: auto;
     min-height: 400px;
     max-height: 600px;
@@ -25,9 +23,8 @@ export const TableTitle = styled.h2`
   color: ${THEME.colors.gray[700]};
   opacity: 1;
 
-  @media (max-width: 768px) {
-    font-size: ${THEME.fonts.sizes.lg};
-    padding: 16px;
+  @media (max-width: 767px) {
+    display: none; /* Скрываем заголовок в мобильной версии */
   }
 `;
 
@@ -63,8 +60,9 @@ export const Table = styled.table`
   border-collapse: collapse;
   font-family: ${THEME.fonts.family};
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     font-size: ${THEME.fonts.sizes.xs};
+    table-layout: fixed; /* Фиксированная ширина колонок */
   }
 `;
 
@@ -75,6 +73,8 @@ export const TableHeader = styled.thead`
 export const HeaderRow = styled.tr``;
 
 export const HeaderCell = styled.th`
+  position: sticky;
+  top: 0;
   padding: 16px 20px;
   text-align: left;
   font-family: ${THEME.fonts.family};
@@ -82,9 +82,10 @@ export const HeaderCell = styled.th`
   font-style: normal;
   font-size: ${THEME.fonts.sizes.xs};
   color: #999999;
-  text-transform: uppercase;
   letter-spacing: 0.5px;
   border-bottom: 1px solid #e2e8f0;
+  background-color: ${THEME.colors.white};
+  z-index: 10;
 
   &:first-child {
     padding-left: 24px;
@@ -95,9 +96,10 @@ export const HeaderCell = styled.th`
     text-align: right;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     padding: 12px 8px;
     font-size: 10px;
+    width: 25%; /* Каждая колонка занимает 25% (1/4) */
 
     &:first-child {
       padding-left: 12px;
@@ -105,13 +107,38 @@ export const HeaderCell = styled.th`
 
     &:last-child {
       padding-right: 12px;
+      display: none; /* Скрываем колонку удаления в мобильной версии */
     }
+
+    ${(props) =>
+      props.$alignRight &&
+      `
+      text-align: right;
+    `}
   }
 `;
 
 export const TableBody = styled.tbody``;
 
-export const TableRow = styled.tr``;
+export const TableRow = styled.tr`
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: ${THEME.colors.gray[50]};
+  }
+
+  ${(props) =>
+    props.$isSelected &&
+    `
+    background-color: ${THEME.colors.primary}15;
+    border-left: 3px solid ${THEME.colors.primary};
+  `}
+
+  @media (max-width: 767px) {
+    cursor: pointer;
+  }
+`;
 
 export const TableCell = styled.td`
   padding: 4px 20px;
@@ -130,7 +157,7 @@ export const TableCell = styled.td`
     text-align: right;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     padding: 6px 8px;
     font-size: 11px;
 
@@ -147,6 +174,10 @@ export const TableCell = styled.td`
 export const DateCell = styled(TableCell)`
   color: ${THEME.colors.black};
   font-weight: ${THEME.fonts.weights.normal};
+
+  @media (max-width: 767px) {
+    text-align: right;
+  }
 `;
 
 export const CategoryCell = styled(TableCell)`
@@ -160,6 +191,10 @@ export const DeleteCell = styled(TableCell)`
   &:last-child {
     padding-right: 24px;
     text-align: center;
+  }
+
+  @media (max-width: 767px) {
+    display: none; /* Скрываем кнопку удаления в мобильной версии */
   }
 `;
 
@@ -185,6 +220,10 @@ export const AmountCell = styled(TableCell)`
   font-weight: ${THEME.fonts.weights.normal};
   font-size: ${THEME.fonts.sizes.xs};
   color: ${THEME.colors.black};
+
+  @media (max-width: 767px) {
+    text-align: right;
+  }
 `;
 
 export const DescriptionCell = styled(TableCell)`
@@ -193,11 +232,7 @@ export const DescriptionCell = styled(TableCell)`
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  @media (max-width: 768px) {
-    max-width: 100px;
-  }
-
-  @media (max-width: 480px) {
+  @media (max-width: 767px) {
     max-width: 60px;
   }
 `;

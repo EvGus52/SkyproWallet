@@ -1,17 +1,16 @@
 import styled from "styled-components";
 import { THEME } from "../../constants/theme";
+import { Card } from "../common/SharedStyles";
 
-export const FormWrapper = styled.div`
-  background-color: ${THEME.colors.white};
-  border-radius: ${THEME.borderRadius.large};
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+export const FormWrapper = styled(Card)`
   padding: 24px;
   display: flex;
   flex-direction: column;
 
-  @media (max-width: 768px) {
-    padding: 16px;
+  @media (max-width: 767px) {
+    padding: 0;
     border-radius: ${THEME.borderRadius.medium};
+    grid-column: span 4;
   }
 `;
 
@@ -23,9 +22,8 @@ export const FormTitle = styled.h2`
   color: ${THEME.colors.gray[700]};
   margin: 0 0 24px 0;
 
-  @media (max-width: 768px) {
-    font-size: ${THEME.fonts.sizes.lg};
-    margin: 0 0 16px 0;
+  @media (max-width: 767px) {
+    display: none; /* Скрываем заголовок формы в мобильной версии */
   }
 `;
 
@@ -47,6 +45,15 @@ export const Label = styled.label`
   font-weight: ${THEME.fonts.weights.semibold};
   color: ${THEME.colors.black};
   margin-bottom: 12px;
+
+  ${(props) =>
+    props.$hasError &&
+    `
+    &::after {
+      content: " *";
+      color: #f25050;
+    }
+  `}
 `;
 
 export const Input = styled.input`
@@ -63,7 +70,12 @@ export const Input = styled.input`
   &.valid {
     outline: none;
     background-color: #f1ebfd;
-    border: 0.5px solid ${THEME.colors.primary};
+    border: 1px solid ${THEME.colors.primary};
+  }
+
+  &.error {
+    background-color: #ffebeb;
+    border: 1px solid #f25050;
   }
 
   &::placeholder {
@@ -74,8 +86,8 @@ export const Input = styled.input`
     color: ${THEME.colors.gray[400]};
   }
 
-  @media (max-width: 768px) {
-    padding: 10px;
+  @media (max-width: 767px) {
+    padding: 8px;
     font-size: ${THEME.fonts.sizes.sm};
   }
 `;
@@ -87,7 +99,7 @@ export const CategoriesContainer = styled.div`
   margin-top: 12px;
   width: 313px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     width: 100%;
     gap: 6px;
   }
@@ -124,7 +136,7 @@ export const CategoryButton = styled.button`
     box-shadow: 0 0 0 2px rgba(115, 52, 234, 0.2);
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     padding: 10px 16px;
     font-size: 11px;
     gap: 6px;
@@ -166,7 +178,8 @@ export const PrimaryButton = styled.button`
   }
 
   &:disabled {
-    opacity: 0.5;
+    background-color: #999999;
     cursor: not-allowed;
+    opacity: 1;
   }
 `;

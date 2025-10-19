@@ -8,12 +8,16 @@ import {
   HeaderContent,
   Logo,
   LogoImage,
+  Nav,
+  NavLink,
+  MobileActionsContainer,
   DropdownWrapper,
   DropdownButton,
   DropdownArrow,
   DropdownMenu,
   DropdownItem,
   LogoutButton,
+  MobileLogoutButton,
 } from "./Header.styled";
 
 const Header = () => {
@@ -26,6 +30,13 @@ const Header = () => {
   // Определяем, находимся ли мы на страницах авторизации
   const isAuthPage =
     location.pathname === "/login" || location.pathname === "/register";
+
+  // Определяем, нужно ли использовать мобильную высоту лого
+  const isMobileLogoPage =
+    location.pathname === "/" ||
+    location.pathname === "/my-expenses" ||
+    location.pathname === "/analytics" ||
+    location.pathname === "/add-expense";
 
   const handleLogout = () => {
     // Очищаем локальные данные
@@ -82,66 +93,104 @@ const Header = () => {
     if (location.pathname === "/analytics") {
       return "Анализ расходов";
     }
+    if (location.pathname === "/add-expense") {
+      return "Новый расход";
+    }
     return "Мои расходы";
   };
 
   return (
-    <HeaderContainer>
+    <HeaderContainer $isMobilePages={isMobileLogoPage}>
       <HeaderContent className="center">
         <Logo>
-          <Link to="/">
-            <LogoImage src="/images/logo.png" alt="Skypro.Wallet" />
-          </Link>
+          <button
+            onClick={() => window.location.reload()}
+            style={{ background: "none", border: "none", cursor: "pointer" }}
+          >
+            <LogoImage
+              src="/images/logo.svg"
+              alt="Skypro.Wallet"
+              $isMobile={isMobileLogoPage}
+            />
+          </button>
         </Logo>
 
         {!isAuthPage && (
           <>
-            {/* Dropdown Navigation */}
-            <DropdownWrapper ref={dropdownRef}>
-              <DropdownButton onClick={toggleDropdown} $isOpen={isDropdownOpen}>
-                {getDropdownTitle()}
-                <DropdownArrow
-                  $isOpen={isDropdownOpen}
-                  width="12"
-                  height="8"
-                  viewBox="0 0 12 8"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M1 1L6 6L11 1"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </DropdownArrow>
-              </DropdownButton>
+            {/* Desktop Navigation */}
+            <Nav>
+              <NavLink
+                as={Link}
+                to="/my-expenses"
+                $active={
+                  location.pathname === "/" ||
+                  location.pathname === "/my-expenses"
+                }
+              >
+                Мои расходы
+              </NavLink>
+              <NavLink
+                as={Link}
+                to="/analytics"
+                $active={location.pathname === "/analytics"}
+              >
+                Анализ расходов
+              </NavLink>
+            </Nav>
 
-              <DropdownMenu $isOpen={isDropdownOpen}>
-                <DropdownItem
-                  as={Link}
-                  to="/my-expenses"
-                  $active={
-                    location.pathname === "/" ||
-                    location.pathname === "/my-expenses"
-                  }
-                  onClick={closeDropdown}
-                >
-                  Мои расходы
-                </DropdownItem>
-                <DropdownItem
-                  as={Link}
-                  to="/analytics"
-                  $active={location.pathname === "/analytics"}
-                  onClick={closeDropdown}
-                >
-                  Анализ расходов
-                </DropdownItem>
-              </DropdownMenu>
-            </DropdownWrapper>
-
+            {/* Desktop Logout Button */}
             <LogoutButton onClick={handleLogoutClick}>Выйти</LogoutButton>
+
+            {/* Mobile Actions Container */}
+            <MobileActionsContainer>
+              <DropdownWrapper ref={dropdownRef}>
+                <DropdownButton
+                  onClick={toggleDropdown}
+                  $isOpen={isDropdownOpen}
+                >
+                  {getDropdownTitle()}
+                  <DropdownArrow
+                    src="/images/icons/header_arrow.svg"
+                    alt="arrow"
+                    $isOpen={isDropdownOpen}
+                  />
+                </DropdownButton>
+
+                <DropdownMenu $isOpen={isDropdownOpen}>
+                  <DropdownItem
+                    as={Link}
+                    to="/my-expenses"
+                    $active={
+                      location.pathname === "/" ||
+                      location.pathname === "/my-expenses"
+                    }
+                    onClick={closeDropdown}
+                  >
+                    Мои расходы
+                  </DropdownItem>
+                  <DropdownItem
+                    as={Link}
+                    to="/add-expense"
+                    $active={location.pathname === "/add-expense"}
+                    onClick={closeDropdown}
+                  >
+                    Новый расход
+                  </DropdownItem>
+                  <DropdownItem
+                    as={Link}
+                    to="/analytics"
+                    $active={location.pathname === "/analytics"}
+                    onClick={closeDropdown}
+                  >
+                    Анализ расходов
+                  </DropdownItem>
+                </DropdownMenu>
+              </DropdownWrapper>
+
+              <MobileLogoutButton onClick={handleLogoutClick}>
+                Выйти
+              </MobileLogoutButton>
+            </MobileActionsContainer>
           </>
         )}
       </HeaderContent>

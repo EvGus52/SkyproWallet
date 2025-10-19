@@ -1,5 +1,6 @@
 import { useTransactions } from "../../contexts/TransactionsContextProvider";
 import { confirmUtils } from "../../utils/confirmAlert.jsx";
+import TableSkeleton from "../TableSkeleton/TableSkeleton";
 import {
   TableWrapper,
   TableTitle,
@@ -30,13 +31,19 @@ const formatAmount = (amount) => {
   );
 };
 
-const TransactionTable = () => {
+const TransactionTable = ({ onTransactionSelect, selectedTransaction }) => {
   const { transactions, loading, error, removeTransaction } = useTransactions();
 
   // Транзакции загружаются в родительском компоненте MyExpenses
 
   const handleDelete = (id, description) => {
     confirmUtils.deleteExpense(description, () => removeTransaction(id));
+  };
+
+  const handleRowClick = (transaction) => {
+    if (onTransactionSelect) {
+      onTransactionSelect(transaction);
+    }
   };
 
   // Функция для форматирования даты из API формата в читаемый вид
@@ -71,21 +78,14 @@ const TransactionTable = () => {
             <HeaderRow>
               <HeaderCell>Описание</HeaderCell>
               <HeaderCell>Категория</HeaderCell>
-              <HeaderCell>Дата</HeaderCell>
-              <HeaderCell>Сумма</HeaderCell>
+              <HeaderCell $alignRight>Дата</HeaderCell>
+              <HeaderCell $alignRight>Сумма</HeaderCell>
               <HeaderCell></HeaderCell>
             </HeaderRow>
           </TableHeader>
           <TableBody>
             {loading ? (
-              <TableRow>
-                <td
-                  colSpan="5"
-                  style={{ textAlign: "center", padding: "20px" }}
-                >
-                  Загрузка...
-                </td>
-              </TableRow>
+              <TableSkeleton rows={8} />
             ) : error ? (
               <TableRow>
                 <td
@@ -108,7 +108,14 @@ const TransactionTable = () => {
               </TableRow>
             ) : transactions.length > 0 ? (
               transactions.map((transaction) => (
-                <TableRow key={transaction._id}>
+                <TableRow
+                  key={transaction._id}
+                  onClick={() => handleRowClick(transaction)}
+                  $isSelected={
+                    selectedTransaction &&
+                    selectedTransaction._id === transaction._id
+                  }
+                >
                   <DescriptionCell>{transaction.description}</DescriptionCell>
                   <CategoryCell>
                     {getCategoryName(transaction.category)}
@@ -117,9 +124,10 @@ const TransactionTable = () => {
                   <AmountCell>{formatAmount(transaction.sum)}</AmountCell>
                   <DeleteCell>
                     <DeleteButton
-                      onClick={() =>
-                        handleDelete(transaction._id, transaction.description)
-                      }
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(transaction._id, transaction.description);
+                      }}
                     >
                       <DeleteIcon
                         src="/images/icons/deleteBtn.svg"

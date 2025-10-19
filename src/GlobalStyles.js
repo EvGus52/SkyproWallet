@@ -10,8 +10,10 @@ export const FormColumn = styled.div`
     gap: 24px;
   }
 
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
+  @media (max-width: 767px) {
+    grid-column: span 4;
+    display: flex;
+    flex-direction: column;
     gap: 16px;
   }
 `;
@@ -19,16 +21,16 @@ export const FormColumn = styled.div`
 export const TableGridArea = styled.div`
   grid-column: span 8;
 
-  @media (max-width: 768px) {
-    grid-column: span 1;
+  @media (max-width: 767px) {
+    width: 100%;
   }
 `;
 
 export const FormGridArea = styled.div`
   grid-column: span 4;
 
-  @media (max-width: 768px) {
-    grid-column: span 1;
+  @media (max-width: 767px) {
+    display: none; /* Скрываем форму в мобильной версии */
   }
 `;
 
@@ -53,6 +55,10 @@ const GlobalStyles = createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
     color: rgb(0, 0, 0);
     background-color: #F4F5F6;
+
+    @media (max-width: 767px) {
+      background-color: #FFFFFF;
+    }
   }
 
   #root {
@@ -63,15 +69,15 @@ const GlobalStyles = createGlobalStyle`
     margin: 0 auto;
     padding-left: 24px;
     padding-right: 24px;
+  }
 
-    @media (max-width: 768px) {
-      padding-left: 16px;
-      padding-right: 16px;
-    }
-
-    @media (max-width: 480px) {
+  .grid-mob {
+    @media (max-width: 767px) {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
       padding-left: 12px;
       padding-right: 12px;
+      gap: 12px;
     }
   }
 `;
