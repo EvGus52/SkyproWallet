@@ -2,6 +2,7 @@ import { useState } from "react";
 import Select from "react-select";
 import { useTransactions } from "../../contexts/TransactionsContextProvider";
 import { confirmUtils } from "../../utils/confirmAlert.jsx";
+import TableSkeleton from "../TableSkeleton/TableSkeleton";
 import {
   TableWrapper,
   TableTitleContainer,
@@ -40,13 +41,9 @@ const sortOptions = [
   { name: "сумме", value: "sum" },
 ];
 
-const TransactionTable = () => {
-  const {
-    transactions = [],
-    loading = false,
-    error = null,
-    removeTransaction,
-  } = useTransactions() || {};
+const TransactionTable = ({ onTransactionSelect, selectedTransaction }) => {
+  const { transactions, loading, error, removeTransaction } = useTransactions();
+
 
   const [selectedCategory, setSelectedCategory] = useState(categoriesList[0]);
   const [sortBy, setSortBy] = useState(sortOptions[0]);
@@ -57,10 +54,13 @@ const TransactionTable = () => {
     }
   };
 
-  const formatAmount = (amount) =>
-    new Intl.NumberFormat("ru-RU", { minimumFractionDigits: 0 }).format(
-      amount
-    ) + " ₽";
+  const handleRowClick = (transaction) => {
+    if (onTransactionSelect) {
+      onTransactionSelect(transaction);
+    }
+  };
+
+  // Функция для форматирования даты из API формата в читаемый вид
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -182,21 +182,14 @@ const TransactionTable = () => {
             <HeaderRow>
               <HeaderCell>Описание</HeaderCell>
               <HeaderCell>Категория</HeaderCell>
-              <HeaderCell>Дата</HeaderCell>
-              <HeaderCell>Сумма</HeaderCell>
+              <HeaderCell $alignRight>Дата</HeaderCell>
+              <HeaderCell $alignRight>Сумма</HeaderCell>
               <HeaderCell></HeaderCell>
             </HeaderRow>
           </TableHeader>
           <TableBody>
             {loading ? (
-              <TableRow>
-                <td
-                  colSpan="5"
-                  style={{ textAlign: "center", padding: "20px" }}
-                >
-                  Загрузка...
-                </td>
-              </TableRow>
+              <TableSkeleton rows={8} />
             ) : error ? (
               <TableRow>
                 <td
@@ -206,9 +199,16 @@ const TransactionTable = () => {
                   {error}
                 </td>
               </TableRow>
-            ) : filteredTransactions.length > 0 ? (
-              filteredTransactions.map((transaction) => (
-                <TableRow key={transaction._id}>
+            ) : transactions.length > 0 ? (
+              transactions.map((transaction) => (
+                <TableRow
+                  key={transaction._id}
+                  onClick={() => handleRowClick(transaction)}
+                  $isSelected={
+                    selectedTransaction &&
+                    selectedTransaction._id === transaction._id
+                  }
+                >
                   <DescriptionCell>{transaction.description}</DescriptionCell>
                   <CategoryCell>
                     {getCategoryName(transaction.category)}
@@ -217,9 +217,10 @@ const TransactionTable = () => {
                   <AmountCell>{formatAmount(transaction.sum)}</AmountCell>
                   <DeleteCell>
                     <DeleteButton
-                      onClick={() =>
-                        handleDelete(transaction._id, transaction.description)
-                      }
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(transaction._id, transaction.description);
+                      }}
                     >
                       <DeleteIcon
                         src="/images/icons/deleteBtn.svg"

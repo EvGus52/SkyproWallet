@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 import Header from "../../components/Header/Header";
@@ -13,9 +14,12 @@ import {
   AnalyticsContainer,
   AnalyticsTitle,
   AnalyticsContent,
+  PeriodSelectionLink,
 } from "./Analytics.styled";
 
 const Analytics = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedRange, setSelectedRange] = useState(null);
   const [allTransactions, setAllTransactions] = useState([]);
@@ -23,6 +27,22 @@ const Analytics = () => {
   const [error, setError] = useState(null);
 
   const { transactions: contextTransactions } = useTransactions();
+
+  // Обработка выбранного периода из навигации
+  useEffect(() => {
+    if (location.state?.selectedPeriod) {
+      const { selectedPeriod, periodType } = location.state;
+      if (periodType === "range") {
+        setSelectedRange(selectedPeriod);
+        setSelectedDate(null);
+      } else {
+        setSelectedDate(selectedPeriod);
+        setSelectedRange(null);
+      }
+      // Очищаем state после использования
+      navigate("/analytics", { replace: true });
+    }
+  }, [location.state, navigate]);
 
   // Функция для обработки выбора дат
   const handleDateSelect = (dateSelection) => {
@@ -191,18 +211,15 @@ const Analytics = () => {
     return "";
   };
 
-  // Если загружаем данные, показываем индикатор
+  // Если загружаем данные, не показываем ничего (данные загружаются быстро)
   if (loading) {
     return (
       <>
         <GlobalStyles />
         <Header />
-        <main className="center">
+        <main className="center grid-mob">
           <AnalyticsContainer>
             <AnalyticsTitle>Анализ расходов</AnalyticsTitle>
-            <div style={{ textAlign: "center", padding: "40px" }}>
-              <div>Загрузка данных...</div>
-            </div>
           </AnalyticsContainer>
         </main>
       </>
@@ -215,7 +232,7 @@ const Analytics = () => {
       <>
         <GlobalStyles />
         <Header />
-        <main className="center">
+        <main className="center grid-mob">
           <AnalyticsContainer>
             <AnalyticsTitle>Анализ расходов</AnalyticsTitle>
             <div
@@ -233,7 +250,7 @@ const Analytics = () => {
     <>
       <GlobalStyles />
       <Header />
-      <main className="center">
+      <main className="center grid-mob">
         <AnalyticsContainer>
           <AnalyticsTitle>Анализ расходов</AnalyticsTitle>
           <AnalyticsContent>
@@ -247,6 +264,9 @@ const Analytics = () => {
               dateRange={formatDateRange()}
             />
           </AnalyticsContent>
+          <PeriodSelectionLink onClick={() => navigate("/period-selection")}>
+            Выбрать другой период
+          </PeriodSelectionLink>
         </AnalyticsContainer>
       </main>
     </>

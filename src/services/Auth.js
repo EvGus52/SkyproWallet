@@ -50,24 +50,6 @@ export async function signUp(userData) {
 }
 
 /**
- * Получить информацию о текущем пользователе
- * @param {string} token - Токен авторизации
- * @returns {Promise<Object>} Данные пользователя
- */
-export async function getCurrentUser(token) {
-  try {
-    const response = await authClient.get(`${API_URL}/user/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error(getErrorMessage(error));
-  }
-}
-
-/**
  * Выход из системы
  * @param {string} token - Токен авторизации
  * @returns {Promise<Object>} Результат выхода

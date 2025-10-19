@@ -6,6 +6,11 @@ export const RegisterContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${THEME.colors.background};
+
+  @media (max-width: 767px) {
+    background-color: #ffffff;
+    justify-content: center;
+  }
 `;
 
 export const RegisterCard = styled.div`
@@ -17,16 +22,11 @@ export const RegisterCard = styled.div`
   max-width: 520px;
   margin: 24px auto;
 
-  @media (max-width: 768px) {
-    padding: 32px 24px;
-    margin: 16px;
-    max-width: calc(100% - 32px);
-  }
-
-  @media (max-width: 480px) {
+  @media (max-width: 767px) {
     padding: 24px 16px;
-    margin: 12px;
+    margin: auto 12px;
     max-width: calc(100% - 24px);
+    box-shadow: none;
   }
 `;
 
@@ -40,8 +40,11 @@ export const RegisterTitle = styled.h1`
 
  
 
-  @media (max-width: 768px) {
-    font-size: ${THEME.fonts.sizes.lg};
+  @media (max-width: 767px) {
+    font-family: ${THEME.fonts.family};
+    font-weight: ${THEME.fonts.weights.bold};
+    font-style: normal;
+    font-size: ${THEME.fonts.sizes.xl};
     margin-bottom: 24px;
   }
 `;
@@ -50,6 +53,10 @@ export const RegisterForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 12px;
+
+  @media (max-width: 767px) {
+    gap: 12px;
+  }
 `;
 
 export const FormGroup = styled.div`
@@ -57,27 +64,37 @@ export const FormGroup = styled.div`
   flex-direction: column;
 `;
 
-/* контейнер, чтобы размещать input, measureSpan и звёздочку */
 export const InputWrapper = styled.div`
   position: relative;
+  display: flex;
+  align-items: center;
   width: 100%;
+
+  &::after {
+    content: ${(props) => (props.$hasError ? '"*"' : '""')};
+    position: absolute;
+    right: 12px;
+    color: #f25050;
+    font-size: 18px;
+    font-weight: 600;
+    pointer-events: none;
+  }
 `;
 
 /* сами инпуты */
 export const Input = styled.input`
   width: 100%;
-  padding: 12px 16px;
-  border-radius: ${THEME.borderRadius.small};
+
   font-family: ${THEME.fonts.family};
   font-size: ${THEME.fonts.sizes.base};
-  color: #000; /* текст должен быть чёрный */
-  background-color: ${(props) =>
-    props.$hasError ? "#FFEBEB" : THEME.colors.white};
-  border: 1px solid
-    ${(props) => (props.$hasError ? "#F25050" : THEME.colors.gray[300])};
-  box-sizing: border-box;
+  padding: 12px 16px;
+  border-radius: ${THEME.borderRadius.small};
 
-  &::placeholder {
+  background-color: ${THEME.colors.white};
+  color: ${THEME.colors.gray[700]};
+  transition: all 0.2s ease;
+
+&::placeholder {
     color: ${THEME.colors.gray[400]};
   }
 
@@ -89,20 +106,31 @@ export const Input = styled.input`
   }
 `;
 
-/* звёздочка - позиционируется абсолютом внутри wrapper.
-   Используем transient prop $left (styled-components не прокинет $left в DOM) */
-export const ErrorStar = styled.span`
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  left: ${(props) =>
-    typeof props.$left === "number"
-      ? `${props.$left}px`
-      : `${props.$left || 12}px`};
-  color: #F25050;
-  font-weight: 700;
-  pointer-events: none;
-  user-select: none;
+  &:focus::placeholder {
+    color: ${THEME.colors.gray[400]};
+  }
+
+  &.valid {
+    background-color: #f1ebfd;
+    border: 1px solid ${THEME.colors.primary};
+  }
+
+  &.error {
+    background-color: #ffebeb;
+    border: 1px solid #f25050;
+  }
+
+  @media (max-width: 767px) {
+    font-weight: ${THEME.fonts.weights.normal};
+    font-style: normal;
+    font-size: ${THEME.fonts.sizes.xs};
+
+    &::placeholder {
+      font-weight: ${THEME.fonts.weights.normal};
+      font-style: normal;
+      font-size: ${THEME.fonts.sizes.xs};
+    }
+  }
 `;
 
 /* span для измерения ширины текста: невидимый, но в DOM и с теми же стилями шрифта */
@@ -139,22 +167,49 @@ export const RegisterButton = styled.button`
   cursor: ${(props) => (props.$disabled ? "not-allowed" : "pointer")};
   margin-top: 6px;
 
-  &:hover {
-    background-color: ${(props) =>
-      !props.$disabled ? THEME.colors.primaryHover : "#CCCCCC"};
+
+  &:hover:not(:disabled) {
+    background-color: ${THEME.colors.primaryHover};
   }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(115, 52, 234, 0.3);
+  }
+
+  &:disabled {
+    background-color: #999999;
+    cursor: not-allowed;
+    opacity: 1;
+  }
+`;
+
+export const ErrorMessage = styled.div`
+  font-family: ${THEME.fonts.family};
+  font-size: ${THEME.fonts.sizes.sm};
+  color: #f25050;
+  text-align: center;
+  margin-top: 12px;
 `;
 
 export const LoginLink = styled.div`
   font-family: ${THEME.fonts.family};
-  font-size: ${THEME.fonts.sizes.sm};
-  color: ${THEME.colors.gray[500]};
+  font-size: ${THEME.fonts.sizes.xs};
+  font-weight: ${THEME.fonts.weights.normal};
+  font-style: normal;
+  color: #999999;
   text-align: center;
   margin-top: 16px;
 
   a {
     text-decoration: underline;
-    color: inherit;
+    font-weight: ${THEME.fonts.weights.normal};
+    font-style: normal;
+    font-size: ${THEME.fonts.sizes.xs};
+
+    &:hover {
+      color: ${THEME.colors.gray[600]};
+    }
   }
 `;
 

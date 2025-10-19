@@ -13,8 +13,6 @@ import {
   FormGroup,
   InputWrapper,
   Input,
-  ErrorStar,
-  MeasureSpan,
   ErrorMessage,
   RegisterButton,
   LoginLink,
@@ -30,53 +28,40 @@ const Register = () => {
     watch,
     formState: { errors, isSubmitting },
   } = useForm({
-    defaultValues: { name: "", email: "", password: "" },
     mode: "onChange",
+    defaultValues: {
+      name: "",
+      login: "",
+      password: "",
+    },
   });
 
-  // значения полей
   const nameValue = watch("name");
-  const emailValue = watch("email");
+  const loginValue = watch("login");
   const passwordValue = watch("password");
 
-  // refs: input DOM + measure span
-  const nameInputRef = useRef(null);
-  const emailInputRef = useRef(null);
-  const passwordInputRef = useRef(null);
-
-  const nameMeasureRef = useRef(null);
-  const emailMeasureRef = useRef(null);
-  const passwordMeasureRef = useRef(null);
-
-  const [nameStarLeft, setNameStarLeft] = useState(12);
-  const [emailStarLeft, setEmailStarLeft] = useState(12);
-  const [passwordStarLeft, setPasswordStarLeft] = useState(12);
-
-  const updateStar = (inputRef, measureRef, setLeft) => {
-    if (!inputRef?.current || !measureRef?.current) return;
-    const inputEl = inputRef.current;
-    const measureEl = measureRef.current;
-
-    const textToMeasure = inputEl.value || inputEl.placeholder || "";
-    measureEl.textContent = textToMeasure;
-
-    const textWidth = measureEl.getBoundingClientRect().width;
-    const inputRect = inputEl.getBoundingClientRect();
-    const inputPaddingLeft =
-      parseFloat(getComputedStyle(inputEl).paddingLeft) || 12;
-    const starOffset = 6;
-
-    let left = inputPaddingLeft + textWidth + starOffset;
-    const maxLeft = inputRect.width - 12;
-    if (left > maxLeft) left = maxLeft;
-    if (!inputEl.value) left = inputPaddingLeft;
-
-    setLeft(Math.round(left));
+  // Функция для проверки валидности поля
+  const isFieldValid = (fieldName, value) => {
+    return value && !errors[fieldName];
   };
 
-  useEffect(() => {
-    updateStar(nameInputRef, nameMeasureRef, setNameStarLeft);
-  }, [nameValue, errors.name]);
+  // Функция для проверки наличия ошибки
+  const hasFieldError = (fieldName) => {
+    return !!errors[fieldName];
+  };
+
+  // Функция для получения класса поля
+  const getFieldClass = (fieldName, value) => {
+    if (hasFieldError(fieldName)) return "error";
+    if (isFieldValid(fieldName, value)) return "valid";
+    return "";
+  };
+
+  // Проверка, есть ли ошибки валидации
+  const hasValidationErrors = Object.keys(errors).length > 0;
+
+  const onSubmit = async (data) => {
+    setError("");
 
   useEffect(() => {
     updateStar(emailInputRef, emailMeasureRef, setEmailStarLeft);
@@ -167,71 +152,68 @@ const Register = () => {
           <RegisterForm onSubmit={handleSubmit(onSubmit)}>
             {/* NAME */}
             <FormGroup>
-              <InputWrapper>
+              <InputWrapper $hasError={hasFieldError("name")}>
                 <Input
-                  {...nameReg.rest}
-                  ref={(e) => {
-                    nameReg.ref(e);
-                    nameInputRef.current = e;
-                  }}
-                  placeholder={errors.name && !nameValue ? "" : "Имя"}
-                  $hasError={!!errors.name}
+                  {...register("name", {
+                    required: "Имя обязательно",
+                    minLength: {
+                      value: 3,
+                      message: "Имя должно содержать минимум 3 символа",
+                    },
+                  })}
+                  type="text"
+                  placeholder="Имя"
+                  className={getFieldClass("name", nameValue)}
                 />
-                <MeasureSpan ref={nameMeasureRef} aria-hidden />
-                {errors.name && <ErrorStar $left={nameStarLeft}>*</ErrorStar>}
               </InputWrapper>
             </FormGroup>
 
             {/* EMAIL (отправляется как login) */}
             <FormGroup>
-              <InputWrapper>
+              <InputWrapper $hasError={hasFieldError("login")}>
                 <Input
-                  {...emailReg.rest}
-                  ref={(e) => {
-                    emailReg.ref(e);
-                    emailInputRef.current = e;
-                  }}
-                  placeholder={errors.email && !emailValue ? "" : "Email"}
-                  $hasError={!!errors.email}
+                  {...register("login", {
+                    required: "Эл. почта обязательна",
+                    minLength: {
+                      value: 3,
+                      message: "Эл. почта должна содержать минимум 3 символа",
+                    },
+                  })}
+                  type="email"
+                  placeholder="Эл. почта"
+                  className={getFieldClass("login", loginValue)}
                 />
-                <MeasureSpan ref={emailMeasureRef} aria-hidden />
-                {errors.email && <ErrorStar $left={emailStarLeft}>*</ErrorStar>}
               </InputWrapper>
             </FormGroup>
 
             {/* PASSWORD */}
             <FormGroup>
-              <InputWrapper>
+              <InputWrapper $hasError={hasFieldError("password")}>
                 <Input
-                  {...passwordReg.rest}
-                  ref={(e) => {
-                    passwordReg.ref(e);
-                    passwordInputRef.current = e;
-                  }}
+                  {...register("password", {
+                    required: "Пароль обязателен",
+                    minLength: {
+                      value: 6,
+                      message: "Пароль должен содержать минимум 6 символов",
+                    },
+                  })}
                   type="password"
-                  placeholder={
-                    errors.password && !passwordValue ? "" : "Пароль"
-                  }
-                  $hasError={!!errors.password}
+                  placeholder="Пароль"
+                  className={getFieldClass("password", passwordValue)}
                 />
-                <MeasureSpan ref={passwordMeasureRef} aria-hidden />
-                {errors.password && (
-                  <ErrorStar $left={passwordStarLeft}>*</ErrorStar>
-                )}
               </InputWrapper>
+              {hasValidationErrors && (
+                <ErrorMessage>
+                  Упс! Введенные вами данные некорректны. Введите данные
+                  корректно и повторите попытку.
+                </ErrorMessage>
+              )}
             </FormGroup>
-
-            {hasClientError && (
-              <ErrorMessage>
-                Упс! Введенные Вами данные некорректны. Введите данные корректно
-                и повторите попытку.
-              </ErrorMessage>
-            )}
 
             <RegisterButton
               type="submit"
-              disabled={isDisabled}
-              $disabled={isDisabled}
+              disabled={isSubmitting || hasValidationErrors}
+
             >
               {isSubmitting ? "Регистрация..." : "Зарегистрироваться"}
             </RegisterButton>

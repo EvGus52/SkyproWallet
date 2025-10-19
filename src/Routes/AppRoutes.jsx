@@ -2,7 +2,9 @@ import { Routes, Route } from "react-router-dom";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import MyExpenses from "../pages/MyExpenses/MyExpenses";
+import AddExpense from "../pages/AddExpense/AddExpense";
 import Analytics from "../pages/Analytics/Analytics";
+import PeriodSelection from "../pages/PeriodSelection/PeriodSelection";
 import Logout from "../pages/Logout/Logout";
 import NotFound from "../pages/NotFound/NotFound";
 import PrivateRoute from "./PrivateRoute";
@@ -29,10 +31,26 @@ const AppRoutes = () => {
         }
       />
       <Route
+        path="/add-expense"
+        element={
+          <PrivateRoute>
+            <AddExpense />
+          </PrivateRoute>
+        }
+      />
+      <Route
         path="/analytics"
         element={
           <PrivateRoute>
             <Analytics />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/period-selection"
+        element={
+          <PrivateRoute>
+            <PeriodSelection />
           </PrivateRoute>
         }
       />
