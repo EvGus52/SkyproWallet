@@ -8,18 +8,6 @@ const apiClient = axios.create({
   timeout: 10000,
 });
 
-export async function validateToken({ token }) {
-  try {
-    const response = await apiClient.get(API_URL, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return { isValid: true, data: response.data }; // Возвращаем массив транзакций для валидации
-  } catch (error) {
-    return { isValid: false, error: getErrorMessage(error) };
-  }
-}
 /**
  * Получить список транзакций с возможностью сортировки и фильтрации
  * @param {Object} params - Параметры запроса
@@ -58,29 +46,6 @@ export async function fetchTransactions({ token, sortBy, filterBy }) {
 }
 
 /**
- * Получить транзакции за определенный период
- * @param {Object} params - Параметры запроса
- * @param {string} params.token - Токен авторизации
- * @param {Object} params.period - Период для получения транзакций
- * @param {string} params.period.start - Начало периода в формате "M-D-YYYY" (например: "12-1-2024")
- * @param {string} params.period.end - Конец периода в формате "M-D-YYYY" (например: "12-1-2025")
- * @returns {Promise<Array>} Массив транзакций за указанный период
- */
-export async function getTransactionsByPeriod({ token, period }) {
-  try {
-    const response = await apiClient.post(`${API_URL}/period`, period, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-    return response.data; // API возвращает массив транзакций за период
-  } catch (error) {
-    throw new Error(getErrorMessage(error));
-  }
-}
-
-/**
  * Получить все транзакции для аналитики
  * @param {Object} params - Параметры запроса
  * @param {string} params.token - Токен авторизации
@@ -94,19 +59,6 @@ export async function fetchAllTransactions({ token }) {
       },
     });
     return response.data; // API возвращает массив транзакций
-  } catch (error) {
-    throw new Error(getErrorMessage(error));
-  }
-}
-
-export async function fetchTaskById({ token, id }) {
-  try {
-    const response = await apiClient.get(`${API_URL}/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data.task;
   } catch (error) {
     throw new Error(getErrorMessage(error));
   }
@@ -126,32 +78,6 @@ export async function fetchTaskById({ token, id }) {
 export async function postTransaction({ token, transaction }) {
   try {
     const response = await apiClient.post(API_URL, transaction, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": " ",
-      },
-    });
-    return response.data; // API возвращает обновленный список всех транзакций
-  } catch (error) {
-    throw new Error(getErrorMessage(error));
-  }
-}
-
-/**
- * Обновить транзакцию по ID
- * @param {Object} params - Параметры запроса
- * @param {string} params.token - Токен авторизации
- * @param {string} params.id - ID транзакции для обновления
- * @param {Object} params.transaction - Новые данные транзакции
- * @param {string} params.transaction.description - Описание (минимум 4 символа)
- * @param {number} params.transaction.sum - Сумма (положительное число)
- * @param {string} params.transaction.category - Категория (food, transport, housing, joy, education, others)
- * @param {string} params.transaction.date - Дата в формате "M-D-YYYY" (например: "12-12-2025")
- * @returns {Promise<Array>} Обновленный список всех транзакций
- */
-export async function editTransaction({ token, id, transaction }) {
-  try {
-    const response = await apiClient.patch(`${API_URL}/${id}`, transaction, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": " ",

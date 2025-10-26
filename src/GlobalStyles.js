@@ -5,14 +5,33 @@ export const FormColumn = styled.div`
   grid-template-columns: repeat(12, 1fr);
   gap: 32px;
   align-items: start;
+
+  @media (max-width: 1024px) {
+    gap: 24px;
+  }
+
+  @media (max-width: 767px) {
+    grid-column: span 4;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
 `;
 
 export const TableGridArea = styled.div`
   grid-column: span 8;
+
+  @media (max-width: 767px) {
+    width: 100%;
+  }
 `;
 
 export const FormGridArea = styled.div`
   grid-column: span 4;
+
+  @media (max-width: 767px) {
+    display: none; /* Скрываем форму в мобильной версии */
+  }
 `;
 
 const GlobalStyles = createGlobalStyle`
@@ -36,6 +55,10 @@ const GlobalStyles = createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
     color: rgb(0, 0, 0);
     background-color: #F4F5F6;
+
+    @media (max-width: 767px) {
+      background-color: #FFFFFF;
+    }
   }
 
   #root {
@@ -46,6 +69,16 @@ const GlobalStyles = createGlobalStyle`
     margin: 0 auto;
     padding-left: 24px;
     padding-right: 24px;
+  }
+
+  .grid-mob {
+    @media (max-width: 767px) {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding-left: 12px;
+      padding-right: 12px;
+      gap: 12px;
+    }
   }
 `;
 

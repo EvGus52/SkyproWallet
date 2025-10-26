@@ -1,11 +1,9 @@
 import styled from "styled-components";
 import { THEME } from "../../constants/theme";
+import { Card, scrollbarStyles } from "../common/SharedStyles";
 
-export const CalendarContainer = styled.div`
-  background: ${THEME.colors.white};
-  border-radius: ${THEME.borderRadius.large};
+export const CalendarContainer = styled(Card)`
   padding: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 24px;
   width: 379px;
   height: 540px;
@@ -16,25 +14,20 @@ export const CalendarContainer = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
   max-width: 379px;
+  grid-column: span 4;
+
+  @media (max-width: 767px) {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    grid-column: span 4;
+    min-height: 450px;
+    margin-bottom: 16px;
+    border: none;
+  }
 
   /* Стили для скроллбара */
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: #f1f5f9;
-    border-radius: 3px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 3px;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
-  }
+  ${scrollbarStyles}
 `;
 
 export const PeriodBlock = styled.div`
@@ -44,6 +37,13 @@ export const PeriodBlock = styled.div`
   display: flex;
   align-items: center;
   padding: 32px;
+
+  @media (max-width: 767px) {
+    padding: 16px;
+    height: auto;
+    min-height: 50px;
+    display: none;
+  }
 `;
 
 export const CalendarHeader = styled.div`
@@ -58,6 +58,10 @@ export const CalendarHeader = styled.div`
     font-size: ${THEME.fonts.sizes.xl};
     color: ${THEME.colors.gray[700]};
     margin: 0;
+
+    @media (max-width: 767px) {
+      font-size: ${THEME.fonts.sizes.lg};
+    }
   }
 `;
 
@@ -67,6 +71,11 @@ export const WeekDaysBlock = styled.div`
   gap: 8px;
   padding: 16px 32px;
   background: ${THEME.colors.white};
+
+  @media (max-width: 767px) {
+    padding: 12px 16px;
+    gap: 4px;
+  }
 `;
 
 export const WeekDay = styled.div`
@@ -126,6 +135,10 @@ export const CalendarGrid = styled.div`
   position: relative;
   max-width: 100%;
   overflow: hidden;
+
+  @media (max-width: 767px) {
+    gap: 4px;
+  }
 `;
 
 export const CalendarDay = styled.div`
@@ -144,6 +157,13 @@ export const CalendarDay = styled.div`
   gap: 10px;
   padding: 10px 15px;
   opacity: 1;
+
+  @media (max-width: 767px) {
+    width: 36px;
+    height: 36px;
+    padding: 8px 12px;
+    gap: 6px;
+  }
 
   span {
     font-family: ${THEME.fonts.family};

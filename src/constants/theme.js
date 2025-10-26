@@ -9,7 +9,7 @@ export const THEME = {
     primaryHover: "#5b21b6",
     background: "#F4F5F6",
     white: "#ffffff",
-    black: "#000000",
+    black: "#000000", 
     gray: {
       100: "#f8f9fa",
       200: "#e9ecef",
@@ -36,5 +36,11 @@ export const THEME = {
       semibold: 600,
       bold: 700,
     },
+  },
+  breakpoints: {
+    mobile: "480px",
+    tablet: "768px",
+    desktop: "1024px",
+    wide: "1440px",
   },
 };

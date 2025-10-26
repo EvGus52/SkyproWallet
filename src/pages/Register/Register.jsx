@@ -11,7 +11,9 @@ import {
   RegisterTitle,
   RegisterForm,
   FormGroup,
+  InputWrapper,
   Input,
+  ErrorMessage,
   RegisterButton,
   LoginLink,
 } from "./Register.styled";
@@ -23,14 +25,40 @@ const Register = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm({
+    mode: "onChange",
     defaultValues: {
       name: "",
       login: "",
       password: "",
     },
   });
+
+  const nameValue = watch("name");
+  const loginValue = watch("login");
+  const passwordValue = watch("password");
+
+  // Функция для проверки валидности поля
+  const isFieldValid = (fieldName, value) => {
+    return value && !errors[fieldName];
+  };
+
+  // Функция для проверки наличия ошибки
+  const hasFieldError = (fieldName) => {
+    return !!errors[fieldName];
+  };
+
+  // Функция для получения класса поля
+  const getFieldClass = (fieldName, value) => {
+    if (hasFieldError(fieldName)) return "error";
+    if (isFieldValid(fieldName, value)) return "valid";
+    return "";
+  };
+
+  // Проверка, есть ли ошибки валидации
+  const hasValidationErrors = Object.keys(errors).length > 0;
 
   const onSubmit = async (data) => {
     setError("");
@@ -72,68 +100,66 @@ const Register = () => {
           )}
           <RegisterForm onSubmit={handleSubmit(onSubmit)}>
             <FormGroup>
-              <Input
-                {...register("name", {
-                  required: "Имя обязательно",
-                  minLength: {
-                    value: 2,
-                    message: "Имя должно содержать минимум 2 символа",
-                  },
-                })}
-                type="text"
-                placeholder="Имя"
-              />
-              {errors.name && (
-                <span style={{ color: "red", fontSize: "12px" }}>
-                  {errors.name.message}
-                </span>
-              )}
+              <InputWrapper $hasError={hasFieldError("name")}>
+                <Input
+                  {...register("name", {
+                    required: "Имя обязательно",
+                    minLength: {
+                      value: 3,
+                      message: "Имя должно содержать минимум 3 символа",
+                    },
+                  })}
+                  type="text"
+                  placeholder="Имя"
+                  className={getFieldClass("name", nameValue)}
+                />
+              </InputWrapper>
             </FormGroup>
 
             <FormGroup>
-              <Input
-                {...register("login", {
-                  required: "Логин обязателен",
-                  minLength: {
-                    value: 3,
-                    message: "Логин должен содержать минимум 3 символа",
-                  },
-                  pattern: {
-                    value: /^[a-zA-Z0-9_]+$/,
-                    message:
-                      "Логин может содержать только буквы, цифры и подчеркивания",
-                  },
-                })}
-                type="text"
-                placeholder="Логин"
-              />
-              {errors.login && (
-                <span style={{ color: "red", fontSize: "12px" }}>
-                  {errors.login.message}
-                </span>
-              )}
+              <InputWrapper $hasError={hasFieldError("login")}>
+                <Input
+                  {...register("login", {
+                    required: "Эл. почта обязательна",
+                    minLength: {
+                      value: 3,
+                      message: "Эл. почта должна содержать минимум 3 символа",
+                    },
+                  })}
+                  type="email"
+                  placeholder="Эл. почта"
+                  className={getFieldClass("login", loginValue)}
+                />
+              </InputWrapper>
             </FormGroup>
 
             <FormGroup>
-              <Input
-                {...register("password", {
-                  required: "Пароль обязателен",
-                  minLength: {
-                    value: 6,
-                    message: "Пароль должен содержать минимум 6 символов",
-                  },
-                })}
-                type="password"
-                placeholder="Пароль"
-              />
-              {errors.password && (
-                <span style={{ color: "red", fontSize: "12px" }}>
-                  {errors.password.message}
-                </span>
+              <InputWrapper $hasError={hasFieldError("password")}>
+                <Input
+                  {...register("password", {
+                    required: "Пароль обязателен",
+                    minLength: {
+                      value: 6,
+                      message: "Пароль должен содержать минимум 6 символов",
+                    },
+                  })}
+                  type="password"
+                  placeholder="Пароль"
+                  className={getFieldClass("password", passwordValue)}
+                />
+              </InputWrapper>
+              {hasValidationErrors && (
+                <ErrorMessage>
+                  Упс! Введенные вами данные некорректны. Введите данные
+                  корректно и повторите попытку.
+                </ErrorMessage>
               )}
             </FormGroup>
 
-            <RegisterButton type="submit" disabled={isSubmitting}>
+            <RegisterButton
+              type="submit"
+              disabled={isSubmitting || hasValidationErrors}
+            >
               {isSubmitting ? "Регистрация..." : "Зарегистрироваться"}
             </RegisterButton>
           </RegisterForm>

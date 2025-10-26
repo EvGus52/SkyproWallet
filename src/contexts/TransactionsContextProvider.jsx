@@ -3,7 +3,6 @@ import TransactionsContext from "./TransactionsContext";
 import {
   fetchTransactions,
   postTransaction,
-  editTransaction,
   deleteTransaction,
 } from "../services/Api";
 import { getToken, isAuthenticated, clearAuthData } from "../utils/tokenUtils";
@@ -104,42 +103,6 @@ export const TransactionsProvider = ({ children }) => {
     }
   }, []);
 
-  // Обновить транзакцию
-  const updateTransaction = useCallback(async (id, transactionData) => {
-    if (!checkAuth()) {
-      return false;
-    }
-
-    const token = getToken();
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await editTransaction({
-        token,
-        id,
-        transaction: transactionData,
-      });
-      // API возвращает объект с полем transactions, извлекаем массив
-      const updatedTransactions = response.transactions || response;
-      setTransactions(updatedTransactions);
-      return true;
-    } catch (err) {
-      if (err.message.includes("авторизации") || err.message.includes("401")) {
-        clearAuthData();
-        appToasts.sessionExpired();
-        setError("Сессия истекла. Пожалуйста, войдите в систему заново");
-      } else {
-        appToasts.generalError(err.message);
-        setError(err.message);
-      }
-      console.error("Ошибка при обновлении транзакции:", err);
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   // Удалить транзакцию
   const removeTransaction = useCallback(async (id) => {
     if (!checkAuth()) {
@@ -193,7 +156,6 @@ export const TransactionsProvider = ({ children }) => {
     error,
     loadTransactions,
     addTransaction,
-    updateTransaction,
     removeTransaction,
     clearError,
     clearTransactions,

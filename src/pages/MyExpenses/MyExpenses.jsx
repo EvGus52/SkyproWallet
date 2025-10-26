@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { appToasts } from "../../utils/toast";
+import { confirmUtils } from "../../utils/confirmAlert.jsx";
 import Header from "../../components/Header/Header";
 import ExpenseForm from "../../components/ExpenseForm/ExpenseForm";
 import TransactionTable from "../../components/TransactionTable/TransactionTable";
@@ -9,11 +11,24 @@ import GlobalStyles, {
   TableGridArea,
   FormGridArea,
 } from "../../GlobalStyles";
+import {
+  PageTitle,
+  MainContainer,
+  TitleContainer,
+  AddButton,
+  MobileDeleteButton,
+} from "./MyExpenses.styled";
 
 const MyExpenses = () => {
-  const { addTransaction, loadTransactions, error, clearError } =
-    useTransactions();
+  const {
+    addTransaction,
+    loadTransactions,
+    error,
+    clearError,
+    removeTransaction,
+  } = useTransactions();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
 
   // Загружаем транзакции при монтировании компонента
   useEffect(() => {
@@ -24,7 +39,7 @@ const MyExpenses = () => {
   useEffect(() => {
     if (error) {
       appToasts.generalError(error);
-    }
+    }  
   }, [error]);
 
   const handleExpenseSubmit = async (expenseData) => {
@@ -47,25 +62,34 @@ const MyExpenses = () => {
     clearError();
   };
 
+  const handleDeleteTransaction = () => {
+    if (selectedTransaction) {
+      confirmUtils.deleteExpense(selectedTransaction.description, () => {
+        removeTransaction(selectedTransaction._id);
+        setSelectedTransaction(null);
+      });
+    }
+  };
+
   return (
     <>
       <GlobalStyles />
       <Header />
-      <main className="center" style={{ padding: "24px" }}>
-        <h1
-          style={{
-            marginBottom: "24px",
-            fontSize: "32px",
-            fontWeight: "700",
-            color: "#1e293b",
-          }}
-        >
-          Мои расходы
-        </h1>
+      <MainContainer className="center grid-mob">
+        <TitleContainer>
+          <PageTitle>Мои расходы</PageTitle>
+          <AddButton as={Link} to="/add-expense">
+            <img src="/images/icons/plus.svg" alt="Добавить расход" />
+            Новый расход
+          </AddButton>
+        </TitleContainer>
 
         <FormColumn>
           <TableGridArea>
-            <TransactionTable />
+            <TransactionTable
+              onTransactionSelect={setSelectedTransaction}
+              selectedTransaction={selectedTransaction}
+            />
           </TableGridArea>
           <FormGridArea>
             <ExpenseForm
@@ -75,7 +99,15 @@ const MyExpenses = () => {
             />
           </FormGridArea>
         </FormColumn>
-      </main>
+
+        {/* Мобильная кнопка удаления */}
+        <MobileDeleteButton
+          onClick={handleDeleteTransaction}
+          disabled={!selectedTransaction}
+        >
+          Удалить расход
+        </MobileDeleteButton>
+      </MainContainer>
     </>
   );
 };

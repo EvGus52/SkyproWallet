@@ -12,9 +12,10 @@ import {
   PrimaryButton,
 } from "./ExpenseForm.styled";
 
-const ExpenseForm = ({ onSubmit, onCancel, isFormSubmitting = false }) => {
+const ExpenseForm = ({ onSubmit, isFormSubmitting = false }) => {
   const { register, handleSubmit, setValue, watch, reset, formState } = useForm(
     {
+      mode: "onChange",
       defaultValues: {
         description: "",
         category: "",
@@ -42,9 +43,29 @@ const ExpenseForm = ({ onSubmit, onCancel, isFormSubmitting = false }) => {
   ];
 
   const selectedCategory = watch("category");
+  const descriptionValue = watch("description");
+  const dateValue = watch("date");
+  const amountValue = watch("amount");
 
   const handleCategorySelect = (categoryValue) => {
     setValue("category", categoryValue, { shouldValidate: true });
+  };
+
+  // Функция для проверки валидности поля
+  const isFieldValid = (fieldName, value) => {
+    return value && !formState.errors[fieldName];
+  };
+
+  // Функция для проверки наличия ошибки
+  const hasFieldError = (fieldName) => {
+    return !!formState.errors[fieldName];
+  };
+
+  // Функция для получения класса поля
+  const getFieldClass = (fieldName, value) => {
+    if (hasFieldError(fieldName)) return "error";
+    if (isFieldValid(fieldName, value)) return "valid";
+    return "";
   };
 
   const onFormSubmit = (data) => {
@@ -58,11 +79,6 @@ const ExpenseForm = ({ onSubmit, onCancel, isFormSubmitting = false }) => {
 
     onSubmit?.(expenseData);
     reset(); // Автоматическая очистка формы
-  };
-
-  const _handleCancel = () => {
-    reset(); // Очистка формы
-    onCancel?.();
   };
 
   // Функция для форматирования даты в формат API (M-D-YYYY)
@@ -79,18 +95,21 @@ const ExpenseForm = ({ onSubmit, onCancel, isFormSubmitting = false }) => {
       <FormTitle>Новый расход</FormTitle>
       <Form onSubmit={handleSubmit(onFormSubmit)}>
         <FormGroup>
-          <Label htmlFor="description">Описание</Label>
+          <Label htmlFor="description" $hasError={hasFieldError("description")}>
+            Описание
+          </Label>
           <Input
             id="description"
             {...register("description", {
               required: "Введите описание",
               minLength: {
-                value: 1,
-                message: "Описание не может быть пустым",
+                value: 4,
+                message: "Описание должно содержать минимум 4 символа",
               },
             })}
             type="text"
-            placeholder="Введите описание"
+            placeholder="Введите описание (минимум 4 символа)"
+            className={getFieldClass("description", descriptionValue)}
           />
           {formState.errors.description && (
             <span style={{ color: "red", fontSize: "12px" }}>
@@ -100,7 +119,7 @@ const ExpenseForm = ({ onSubmit, onCancel, isFormSubmitting = false }) => {
         </FormGroup>
 
         <FormGroup>
-          <Label>Категория</Label>
+          <Label $hasError={hasFieldError("category")}>Категория</Label>
           <CategoriesContainer>
             {categories.map((category) => (
               <CategoryButton
@@ -133,7 +152,9 @@ const ExpenseForm = ({ onSubmit, onCancel, isFormSubmitting = false }) => {
         </FormGroup>
 
         <FormGroup>
-          <Label htmlFor="date">Дата</Label>
+          <Label htmlFor="date" $hasError={hasFieldError("date")}>
+            Дата
+          </Label>
           <Input
             id="date"
             {...register("date", {
@@ -141,6 +162,7 @@ const ExpenseForm = ({ onSubmit, onCancel, isFormSubmitting = false }) => {
             })}
             type="date"
             placeholder="Выберите дату"
+            className={getFieldClass("date", dateValue)}
           />
           {formState.errors.date && (
             <span style={{ color: "red", fontSize: "12px" }}>
@@ -150,7 +172,9 @@ const ExpenseForm = ({ onSubmit, onCancel, isFormSubmitting = false }) => {
         </FormGroup>
 
         <FormGroup>
-          <Label htmlFor="amount">Сумма</Label>
+          <Label htmlFor="amount" $hasError={hasFieldError("amount")}>
+            Сумма
+          </Label>
           <Input
             id="amount"
             {...register("amount", {
@@ -168,6 +192,7 @@ const ExpenseForm = ({ onSubmit, onCancel, isFormSubmitting = false }) => {
             placeholder="Введите сумму"
             min="0.01"
             step="0.01"
+            className={getFieldClass("amount", amountValue)}
           />
           {formState.errors.amount && (
             <span style={{ color: "red", fontSize: "12px" }}>
@@ -178,7 +203,11 @@ const ExpenseForm = ({ onSubmit, onCancel, isFormSubmitting = false }) => {
 
         <PrimaryButton
           type="submit"
-          disabled={isFormSubmitting || formState.isSubmitting}
+          disabled={
+            isFormSubmitting ||
+            formState.isSubmitting ||
+            Object.keys(formState.errors).length > 0
+          }
         >
           {isFormSubmitting || formState.isSubmitting
             ? "Добавление..."

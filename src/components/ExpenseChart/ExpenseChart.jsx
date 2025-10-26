@@ -60,11 +60,13 @@ const ExpenseChart = ({ data = [], totalAmount = 0, dateRange }) => {
           (item) => categoryColors[item.category] || "#64748b"
         ),
         borderWidth: 0,
-        borderRadius: 12,
+        borderRadius: window.innerWidth <= 767 ? 6 : 12,
         borderSkipped: false,
       },
     ],
   };
+
+  const isMobile = window.innerWidth <= 767;
 
   const options = {
     responsive: true,
@@ -83,12 +85,12 @@ const ExpenseChart = ({ data = [], totalAmount = 0, dateRange }) => {
         displayColors: false,
         titleFont: {
           family: "Inter, sans-serif",
-          size: 14,
+          size: isMobile ? 12 : 14,
           weight: "600",
         },
         bodyFont: {
           family: "Inter, sans-serif",
-          size: 12,
+          size: isMobile ? 11 : 12,
         },
         callbacks: {
           title: function (context) {
@@ -116,10 +118,19 @@ const ExpenseChart = ({ data = [], totalAmount = 0, dateRange }) => {
         ticks: {
           font: {
             family: "Inter, sans-serif",
-            size: 12,
+            size: isMobile ? 10 : 12,
             weight: "500",
           },
           color: "#374151",
+          maxRotation: 0,
+          callback: function (value) {
+            const label = this.getLabelForValue(value);
+            // Обрезаем только на мобильных
+            if (isMobile && label.length > 6) {
+              return label.substring(0, 6) + "...";
+            }
+            return label;
+          },
         },
       },
       y: {
@@ -129,7 +140,7 @@ const ExpenseChart = ({ data = [], totalAmount = 0, dateRange }) => {
     },
     elements: {
       bar: {
-        borderRadius: 12,
+        borderRadius: isMobile ? 6 : 12,
       },
     },
     animation: {
@@ -138,8 +149,8 @@ const ExpenseChart = ({ data = [], totalAmount = 0, dateRange }) => {
     },
     layout: {
       padding: {
-        top: 40,
-        bottom: 20,
+        top: isMobile ? 30 : 40,
+        bottom: isMobile ? 10 : 20,
       },
     },
   };
@@ -164,7 +175,7 @@ const ExpenseChart = ({ data = [], totalAmount = 0, dateRange }) => {
               chart.chartArea.bottom - 4,
               bar.width,
               4,
-              12
+              window.innerWidth <= 767 ? 6 : 12
             );
             ctx.fill();
             ctx.restore();
@@ -201,9 +212,13 @@ const ExpenseChart = ({ data = [], totalAmount = 0, dateRange }) => {
     id: "valueOnTop",
     afterDatasetsDraw: (chart) => {
       const { ctx, data } = chart;
+      const isMobile = window.innerWidth <= 767;
 
       ctx.save();
-      ctx.font = "600 12px Inter, sans-serif";
+      // Адаптивный размер шрифта
+      ctx.font = isMobile
+        ? "600 10px Inter, sans-serif"
+        : "600 12px Inter, sans-serif";
       ctx.fillStyle = "#374151";
       ctx.textAlign = "center";
       ctx.textBaseline = "bottom";
@@ -213,8 +228,13 @@ const ExpenseChart = ({ data = [], totalAmount = 0, dateRange }) => {
         meta.data.forEach((bar, index) => {
           const value = dataset.data[index];
           const x = bar.x;
-          const y = bar.y - 8;
-          ctx.fillText(`${value.toLocaleString()} ₽`, x, y);
+          // Меньше отступ на мобильных
+          const y = bar.y - (isMobile ? 4 : 8);
+          // Убираем символ ₽ на мобильных для экономии места
+          const text = isMobile
+            ? value.toLocaleString()
+            : `${value.toLocaleString()} ₽`;
+          ctx.fillText(text, x, y);
         });
       });
 
@@ -226,7 +246,9 @@ const ExpenseChart = ({ data = [], totalAmount = 0, dateRange }) => {
     <ChartWrapper>
       <HeaderBlock>
         <TotalSum>{totalAmount.toLocaleString()} ₽</TotalSum>
-        <DateText>Расходы за {dateRange}</DateText>
+        <DateText>
+          <span className="period-label">Расходы за</span> {dateRange}
+        </DateText>
       </HeaderBlock>
       <ChartArea>
         <Bar
